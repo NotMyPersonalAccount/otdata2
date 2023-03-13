@@ -5,6 +5,7 @@ specifiers:
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   autoprefixer: ^10.4.14
+  classnames: ^2.3.2
   eslint: 8.36.0
   eslint-config-next: 13.2.4
   next: 13.2.4
@@ -19,6 +20,7 @@ specifiers:
   zustand: ^4.3.6
 
 dependencies:
+  classnames: 2.3.2
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
   react: 18.2.0
@@ -615,6 +617,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
