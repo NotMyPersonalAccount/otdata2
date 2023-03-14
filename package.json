@@ -8,8 +8,9 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@typegoose/typegoose": "^10.3.2",
 		"classnames": "^2.3.2",
-		"mongoose": "^7.0.1",
+		"mongoose": "^6.10.3",
 		"next": "13.2.4",
 		"next-auth": "^4.20.1",
 		"react": "18.2.0",
