@@ -21,7 +21,12 @@ export default function Navbar() {
 					className="md:hidden"
 					onClick={() => setToggled(!toggled)}
 				>
-					<Image src={hamburgerIcon} alt="Toggle Menu" width={24} height={24} />
+					<Image
+						src={hamburgerIcon}
+						alt="Toggle Menu"
+						width={24}
+						height={24}
+					/>
 				</button>
 			</div>
 			<div className={classNames("my-2 md:flex gap-2")}>
@@ -33,7 +38,13 @@ export default function Navbar() {
 					</>
 				) : (
 					<>
-						<button onClick={() => signIn("google")}>Login</button>
+						<button
+							onClick={() =>
+								signIn("google", { callbackUrl: "/profile" })
+							}
+						>
+							Login
+						</button>
 					</>
 				)}
 			</div>
