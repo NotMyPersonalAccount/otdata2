@@ -1,12 +1,21 @@
 import hamburgerIcon from "../../public/hamburger.svg";
 import classNames from "classnames";
+import dayjs from "dayjs";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Navbar() {
 	const [toggled, setToggled] = useState(false);
 	const { data: session, status } = useSession();
+
+	const [time, setTime] = useState(dayjs().format("h:mm:ss"));
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setTime(dayjs().format("h:mm:ss"));
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
 
 	return (
 		<div
@@ -34,7 +43,9 @@ export default function Navbar() {
 					<>
 						<span className="block">Classes</span>
 						<span className="block">{session?.user?.name}</span>
-						<button onClick={() => signOut()}>Logout</button>
+						<button onClick={() => signOut({ callbackUrl: "/" })}>
+							Logout
+						</button>
 					</>
 				) : (
 					<>
@@ -47,6 +58,7 @@ export default function Navbar() {
 						</button>
 					</>
 				)}
+				<p>{time}</p>
 			</div>
 		</div>
 	);

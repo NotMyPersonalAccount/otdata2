@@ -7,6 +7,7 @@ specifiers:
   '@types/react-dom': 18.0.11
   autoprefixer: ^10.4.14
   classnames: ^2.3.2
+  dayjs: ^1.11.7
   eslint: 8.36.0
   eslint-config-next: 13.2.4
   mongoose: ^6.10.3
@@ -23,6 +24,7 @@ specifiers:
 dependencies:
   '@typegoose/typegoose': 10.3.2_mongoose@6.10.3
   classnames: 2.3.2
+  dayjs: 1.11.7
   mongoose: 6.10.3
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
@@ -1527,6 +1529,10 @@ packages:
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
+    dev: false
 
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
