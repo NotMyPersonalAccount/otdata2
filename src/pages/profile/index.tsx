@@ -1,6 +1,6 @@
 import { UserSchema } from "@/models/User";
 import { getStudentProfile } from "@/utils/mongoose";
-import { enforceAuthentication } from "@/utils/nextauth";
+import { enforceAuthentication } from "@/utils/enforcement";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 
@@ -26,12 +26,12 @@ function ProfileSection({ title, children }: any) {
 	);
 }
 
-function ProfileInfo({ title, value }: any) {
+function ProfileInfo({ title, children }: any) {
 	return (
 		<div>
 			<span>
 				<span className="font-bold">{title}: </span>
-				{value}
+				{children}
 			</span>
 		</div>
 	);
@@ -45,10 +45,28 @@ export default function Profile({ data }: Props) {
 			<h1 className="text-4xl">
 				{user.fname} {user.lname} ({user.pronouns})
 			</h1>
-			<div className="flex flex-wrap gap-4 my-4 ml-2">
-				<ProfileSection title="General">
-					<ProfileInfo title="Aeries ID" value={user.aeriesid} />
-				</ProfileSection>
+			<div className="ml-2 my-4">
+				<div className="flex flex-wrap gap-4">
+					<ProfileSection title="General">
+						<ProfileInfo title="Address">
+							<span className="ml-2">
+								<p>
+									{user.astreet}
+									{user.acity}, {user.astate} {user.azipcode}
+								</p>
+							</span>
+						</ProfileInfo>
+						<ProfileInfo title="Ethnicity">
+							{user.uethnicity!.join(", ")}
+						</ProfileInfo>
+					</ProfileSection>
+					<ProfileSection title="Contact">
+						<ProfileInfo title="Email">{user.otemail}</ProfileInfo>
+						<ProfileInfo title="Phone Number">
+							{user.mobile}
+						</ProfileInfo>
+					</ProfileSection>
+				</div>
 			</div>
 		</div>
 	);
