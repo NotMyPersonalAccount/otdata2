@@ -4,6 +4,7 @@ import { DefaultJWT } from "next-auth/jwt";
 type ExtraSessionInfo = {
 	admin: boolean;
 	role: string;
+	aeriesid: number;
 };
 
 declare module "next-auth" {

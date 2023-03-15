@@ -1,4 +1,6 @@
+import User from "@/models/User";
 import mongoose, { Model, Mongoose, Schema } from "mongoose";
+import { sendError } from "./error_handling";
 
 declare global {
 	var mongoose: {
@@ -29,4 +31,16 @@ export async function connectMongo() {
 		throw e;
 	}
 	return cached.conn;
+}
+
+export async function getStudentProfile(id: number) {
+	await connectMongo();
+	const data = await User.findOne({ aeriesid: id });
+	if (data === null) return sendError("Unknown student");
+
+	return {
+		props: {
+			data: JSON.stringify(data)
+		}
+	};
 }
