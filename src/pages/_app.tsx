@@ -10,7 +10,8 @@ export default function App({
 	return (
 		<SessionProvider session={session}>
 			<Navbar />
-			<Component {...pageProps} />
+			{pageProps.error ? pageProps.error : <Component {...pageProps} />}
 		</SessionProvider>
 	);
 }
+
