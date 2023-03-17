@@ -50,8 +50,8 @@ export default function Profile({ data }: Props) {
 					<ProfileSection title="General">
 						<ProfileInfo title="Address">
 							<span className="ml-2">
+								<p>{user.astreet}</p>
 								<p>
-									{user.astreet}
 									{user.acity}, {user.astate} {user.azipcode}
 								</p>
 							</span>
