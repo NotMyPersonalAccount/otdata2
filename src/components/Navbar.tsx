@@ -9,11 +9,14 @@ export default function Navbar() {
 	const [toggled, setToggled] = useState(false);
 	const { data: session, status } = useSession();
 
-	const [time, setTime] = useState(dayjs().format("h:mm:ss"));
+	const [time, setTime] = useState("");
 	useEffect(() => {
-		const interval = setInterval(() => {
+		function updateTime() {
 			setTime(dayjs().format("h:mm:ss"));
-		}, 1000);
+		}
+
+		const interval = setInterval(updateTime, 1000);
+		updateTime();
 		return () => clearInterval(interval);
 	}, []);
 
