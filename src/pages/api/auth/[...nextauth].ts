@@ -25,6 +25,7 @@ export const authOptions: AuthOptions = {
 			token.otdata = {
 				admin: dbUser.isadmin,
 				role: dbUser.role,
+				currUserId: dbUser._id,
 				aeriesid: dbUser.aeriesid!
 			};
 			return token;
