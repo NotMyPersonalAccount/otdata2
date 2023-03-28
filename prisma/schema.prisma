@@ -64,5 +64,46 @@ model User {
   break_class          String?   @map("breakclass")
   break_duration       Int?      @map("breakduration")
 
+  google_classrooms GoogleClassroom[]
+  enrollment        GEnrollment[]
+
   @@map("user")
+}
+
+model GoogleClassroom {
+  id                       String        @id @default(auto()) @map("_id") @db.ObjectId
+  teacher_id               String        @map("teacher") @db.ObjectId
+  teacher                  User?         @relation(fields: [teacher_id], references: [id])
+  teacher_dict             Json?         @map("gteacherdict")
+  class_dict               Json?         @map("gclassdict")
+  coursework_dict          Json?         @map("courseworkdict")
+  coursework_update        DateTime?     @map("courseworkupdate")
+  student_submissions_dict Json?         @map("studsubsdict")
+  google_classroom_id      String?       @unique @map("gclassid")
+  cohorts                  String[]      @map("sortcohorts")
+  roster_temp              Json[]        @map("grosterTemp")
+  aeries_id                String?       @map("aeriesid")
+  aeries_name              String?       @map("aeriesname")
+  periods                  Int[]         @map("pers")
+  enrollment               GEnrollment[]
+
+  @@map("google_classroom")
+}
+
+model GEnrollment {
+  id                  String           @id @default(auto()) @map("_id") @db.ObjectId
+  classroom_id        String           @map("gclassroom") @db.ObjectId
+  google_classroom    GoogleClassroom? @relation(fields: [classroom_id], references: [id])
+  owner_id            String           @map("owner") @db.ObjectId
+  owner               User?            @relation(fields: [owner_id], references: [id])
+  create_date         DateTime?        @default(now()) @map("createdate")
+  status              String?          @default("~~~") @map("status")
+  user_classname      String?          @map("classnameByUser")
+  missing_update      DateTime?        @map("nummissingupdate")
+  missing_assignments Json?            @map("missingasses")
+  missing_link        String?          @map("missinglink")
+  cohort              String?          @default("~") @map("sortCohort")
+  submissions_update  DateTime?        @map("submissionsupdate")
+
+  @@map("g_enrollment")
 }
