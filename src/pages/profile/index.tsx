@@ -2,11 +2,19 @@ import { getUserByAeriesId } from "@/lib/database/user";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
+import { ReactNode } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 type Props = {
 	data: string;
 };
+
+type ProfileSectionProps = {
+	title: string;
+	children: ReactNode;
+};
+
+type ProfileInfoProps = ProfileSectionProps;
 
 export const getServerSideProps = enforceAuthentication(async context => {
 	const session = await getServerSession(
@@ -21,7 +29,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 	};
 });
 
-function ProfileSection({ title, children }: any) {
+function ProfileSection({ title, children }: ProfileSectionProps) {
 	return (
 		<div className="bg-gray-200 rounded-xl px-8 py-4 w-80">
 			<h1 className="text-2xl font-bold">{title}</h1>
@@ -30,7 +38,7 @@ function ProfileSection({ title, children }: any) {
 	);
 }
 
-function ProfileInfo({ title, children }: any) {
+function ProfileInfo({ title, children }: ProfileInfoProps) {
 	return (
 		<div>
 			<span>
@@ -55,7 +63,9 @@ export default function Profile({ data }: Props) {
 							<span className="ml-2">
 								<p>{user.aeries_street}</p>
 								<p>
-									{user.aeries_city}, {user.aeries_state} {user.aeries_zipcode}
+									{user.aeries_city}, {user.aeries_state}
+									{" "}
+									{user.aeries_zipcode}
 								</p>
 							</span>
 						</ProfileInfo>
