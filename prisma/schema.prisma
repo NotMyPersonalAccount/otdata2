@@ -74,7 +74,7 @@ model User {
 
 model GoogleClassroom {
   id                       String        @id @default(auto()) @map("_id") @db.ObjectId
-  teacher_id               String        @map("teacher") @db.ObjectId
+  teacher_id               String?       @map("teacher") @db.ObjectId
   teacher                  User?         @relation(fields: [teacher_id], references: [id])
   teacher_dict             Json?         @map("gteacherdict")
   class_dict               Json?         @map("gclassdict")
