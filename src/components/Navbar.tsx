@@ -4,7 +4,15 @@ import dayjs from "dayjs";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
+
+function NavbarLink(
+	props: LinkProps & {
+		children: React.ReactNode;
+	}
+) {
+	return <Link className="block" {...props} />;
+}
 
 export default function Navbar() {
 	const [toggled, setToggled] = useState(false);
@@ -29,7 +37,9 @@ export default function Navbar() {
 			)}
 		>
 			<div className="flex flex-1 justify-between">
-				<Link className="text-2xl" href="/">OTData</Link>
+				<Link className="text-2xl" href="/">
+					OTData
+				</Link>
 				<button
 					className="md:hidden"
 					onClick={() => setToggled(!toggled)}
@@ -45,10 +55,10 @@ export default function Navbar() {
 			<div className={classNames("my-2 md:flex gap-2")}>
 				{status == "authenticated" ? (
 					<>
-						<Link href="/checkin">
-							Classes
-						</Link>
-						<Link href="/profile">{session?.user?.name}</Link>
+						<NavbarLink href="/checkin">Classes</NavbarLink>
+						<NavbarLink href="/profile">
+							{session?.user?.name}
+						</NavbarLink>
 						<button onClick={() => signOut({ callbackUrl: "/" })}>
 							Logout
 						</button>
