@@ -1,6 +1,6 @@
-import { UserSchema } from "@/models/User";
-import { getStudentProfile } from "@/utils/mongoose";
+import { getUserByAeriesId } from "@/lib/database/user";
 import { enforceAuthentication } from "@/utils/enforcement";
+import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 
@@ -14,7 +14,11 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		context.res,
 		authOptions
 	);
-	return await getStudentProfile(session!.aeriesid);
+	return {
+		props: {
+			data: JSON.stringify(await getUserByAeriesId(session!.aeriesid))
+		}
+	};
 });
 
 function ProfileSection({ title, children }: any) {
@@ -38,30 +42,29 @@ function ProfileInfo({ title, children }: any) {
 }
 
 export default function Profile({ data }: Props) {
-	const user: UserSchema = JSON.parse(data);
-
+	const user: User = JSON.parse(data);
 	return (
 		<div className="mx-6 my-6">
 			<h1 className="text-4xl">
-				{user.fname} {user.lname} ({user.pronouns})
+				{user.first_name} {user.last_name} ({user.pronouns})
 			</h1>
 			<div className="ml-2 my-4">
 				<div className="flex flex-wrap gap-4">
 					<ProfileSection title="General">
 						<ProfileInfo title="Address">
 							<span className="ml-2">
-								<p>{user.astreet}</p>
+								<p>{user.aeries_street}</p>
 								<p>
-									{user.acity}, {user.astate} {user.azipcode}
+									{user.aeries_city}, {user.aeries_state} {user.aeries_zipcode}
 								</p>
 							</span>
 						</ProfileInfo>
 						<ProfileInfo title="Ethnicity">
-							{user.uethnicity!.join(", ")}
+							{user.user_ethnicity?.join(", ")}
 						</ProfileInfo>
 					</ProfileSection>
 					<ProfileSection title="Contact">
-						<ProfileInfo title="Email">{user.otemail}</ProfileInfo>
+						<ProfileInfo title="Email">{user.ot_email}</ProfileInfo>
 						<ProfileInfo title="Phone Number">
 							{user.mobile}
 						</ProfileInfo>

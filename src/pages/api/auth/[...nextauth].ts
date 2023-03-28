@@ -1,5 +1,4 @@
-import User from "@/models/User";
-import { connectMongo } from "@/utils/mongoose";
+import { getUserBySchoolEmail } from "@/lib/database/user";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -12,21 +11,18 @@ export const authOptions: AuthOptions = {
 	],
 	callbacks: {
 		async jwt({ token, user, account, profile, isNewUser }) {
-			if (user?.email === undefined) {
-				//TODO: Handle this properly
-				return token;
-			}
-			await connectMongo();
-			const dbUser = await User.findOne({ otemail: user.email });
+			if (user === undefined) return token;
+
+			const dbUser = await getUserBySchoolEmail(user!.email!);
 			if (dbUser === null) {
-				//TODO: Handle this properly
+				//TODO: Create user
 				return token;
 			}
 			token.otdata = {
-				admin: dbUser.isadmin,
-				role: dbUser.role,
-				currUserId: dbUser._id,
-				aeriesid: dbUser.aeriesid!
+				admin: dbUser.is_admin!,
+				role: dbUser.role!,
+				currUserId: dbUser.id,
+				aeriesid: dbUser.aeries_id!
 			};
 			return token;
 		},

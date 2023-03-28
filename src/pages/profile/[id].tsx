@@ -1,10 +1,14 @@
-import { getStudentProfile } from "@/utils/mongoose";
 import { enforceTeacher } from "@/utils/enforcement";
+import Profile from "@/pages/profile";
+import { getUserByAeriesId } from "@/lib/database/user";
 
 export const getServerSideProps = enforceTeacher(async context => {
-	return await getStudentProfile(parseInt(context.query.id as string));
+	return {
+		props: {
+			data: await getUserByAeriesId(parseInt(context.query.id as string))
+		}
+	};
 });
 
-import Profile from "@/pages/profile";
 export default Profile;
 

@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  aeries_first_name             String? @map("afname")
+  aeries_last_name              String? @map("alname")
+  aeries_adults                 String? @map("aadults")
+  aeries_adult_email            String? @map("aadultemail")
+  aeries_adult1_phone           String? @map("aadult1phone")
+  aeries_adult2_phone           String? @map("aadult2phone")
+  aeries_ethnicity              String? @map("aethnicity")
+  aeries_gender                 String? @map("agender")
+  grade                         Int?
+  language_fluency              String? @map("langflu")
+  sped                          String?
+  ot_email                      String  @unique @map("otemail")
+  aeries_phone                  String? @map("aphone")
+  aeries_id                     Int?    @unique @map("aeriesid")
+  google_id                     String? @unique @map("gid")
+  role                          String? @map("role")
+  aeries_street                 String? @map("astreet")
+  aeries_city                   String? @map("acity")
+  aeries_state                  String? @map("astate")
+  aeries_zipcode                Int?    @map("azipcode")
+  gpa                           Int?
+  cohort                        String?
+  google_class_guardians        Json?   @default("{}") @map("gclassguardians")
+  google_class_guardian_invites Json?   @default("{}") @map("gclassguardianinvites")
+
+  latitude             Float?    @map("lat")
+  longitude            Float?    @map("lon")
+  first_name           String?   @map("fname")
+  last_name            String?   @map("lname")
+  is_admin             Boolean?  @default(false) @map("isadmin")
+  pronouns             String?
+  user_first_name      String?   @map("ufname")
+  user_last_name       String?   @map("ulname")
+  birthdate            DateTime?
+  personal_email       String?   @map("personalemail")
+  alt_email            String?   @map("altemail")
+  mobile               Int?
+  user_street          String?   @map("ustreet")
+  user_city            String?   @map("ucity")
+  user_state           String?   @map("ustate")
+  user_zipcode         Int?      @map("uzipcode")
+  alt_phone            Int?      @map("altphone")
+  user_gender          String?   @map("ugender")
+  user_ethnicity       String[]  @map("uethnicity")
+  user_ethnicity_other String?   @map("uethnicityother")
+  // // last_edited          DateTime[] @map("lastedited")
+  last_login           DateTime? @map("lastlogin")
+  case_manager         String?   @map("casemanager")
+  linkedin             String?
+  shirt_size           String?   @map("shirtsize")
+  break_start          DateTime? @map("breakstart")
+  break_class          String?   @map("breakclass")
+  break_duration       Int?      @map("breakduration")
+
+  @@map("user")
+}

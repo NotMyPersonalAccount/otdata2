@@ -1,11 +1,10 @@
-import { ObjectId, Types } from "mongoose";
 import NextAuth from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
 
 type ExtraSessionInfo = {
 	admin: boolean;
 	role: string;
-	currUserId: Types.ObjectId,
+	currUserId: string,
 	aeriesid: number;
 };
 
