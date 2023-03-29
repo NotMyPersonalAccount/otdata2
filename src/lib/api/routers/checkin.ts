@@ -37,14 +37,13 @@ export const checkinRouter = router({
 			const user = await getUserById(userId);
 			if (!user) throw new Error("User not found");
 
-			await createCheckin(
+			return await createCheckin(
 				_class,
 				user,
 				working_on,
 				status,
 				assignment + " " + working_on_other
 			);
-			return true;
 		})
 });
 
