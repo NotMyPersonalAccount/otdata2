@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { trpc } from "@/lib/api/trpc";
 import "@/styles/globals.css";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -7,10 +8,7 @@ import type { AppProps } from "next/app";
 
 dayjs.extend(relativeTime);
 
-export default function App({
-	Component,
-	pageProps: { session, ...pageProps }
-}: AppProps) {
+function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 	return (
 		<SessionProvider session={session}>
 			<Navbar />
@@ -18,4 +16,6 @@ export default function App({
 		</SessionProvider>
 	);
 }
+
+export default trpc.withTRPC(App);
 
