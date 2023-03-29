@@ -17,10 +17,8 @@ export default function Form({ children, formState, ...props }: Props) {
 				{children}
 			</div>
 			<button
-				className={classNames(
-					"px-2 py-2 w-24 h-10 bg-blue-300 hover:bg-blue-400 rounded-lg",
-					{ disabled: formState.isSubmitting }
-				)}
+				className="px-2 py-2 w-24 h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
+				disabled={formState.isSubmitting}
 			>
 				{formState.isSubmitting ? (
 					<div className="flex justify-center">
