@@ -114,21 +114,22 @@ model GEnrollment {
 model Checkin {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  create_date         DateTime?        @default(now()) @map("createdate")
-  google_classroom_id String?          @map("gclassid")
-  classroom_id        String           @map("googleclass") @db.ObjectId
-  google_classroom    GoogleClassroom? @relation(fields: [classroom_id], references: [id])
-  student_id          String           @map("student") @db.ObjectId
-  student             User?            @relation(name: "checkins_owned", fields: [student_id], references: [id])
-  user_agent          String?
-  location_data       Json?            @map("locationData")
-  working_on          String?          @map("workingon")
-  description         String?          @map("desc")
-  status              String?          @default("inactive")
-  synchronous         Boolean?
-  created_by_id       String?          @map("createdBy") @db.ObjectId
-  created_by          User?            @relation(name: "checkins_created", fields: [created_by_id], references: [id])
-  approved            Boolean?
+  create_date           DateTime?        @default(now()) @map("createdate")
+  google_classroom_id   String?          @map("gclassid")
+  classroom_id          String           @map("googleclass") @db.ObjectId
+  google_classroom      GoogleClassroom? @relation(fields: [classroom_id], references: [id])
+  google_classroom_name String?          @map("gclassname")
+  student_id            String           @map("student") @db.ObjectId
+  student               User?            @relation(name: "checkins_owned", fields: [student_id], references: [id])
+  user_agent            String?
+  location_data         Json?            @map("locationData")
+  working_on            String?          @map("workingon")
+  description           String?          @map("desc")
+  status                String?          @default("inactive")
+  synchronous           Boolean?
+  created_by_id         String?          @map("createdBy") @db.ObjectId
+  created_by            User?            @relation(name: "checkins_created", fields: [created_by_id], references: [id])
+  approved              Boolean?
 
   camera_off              Boolean? @map("cameraoff")
   camera_off_reason       String?  @map("cameraoffreason")
