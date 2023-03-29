@@ -1,6 +1,7 @@
 import CheckinForm from "@/components/forms/CheckinForm";
 import { getClassroomByGoogleId } from "@/lib/database/class";
 import { enforceAuthentication } from "@/utils/enforcement";
+import { sendError } from "@/utils/error_handling";
 import { Checkin, GoogleClassroom, Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
@@ -17,23 +18,24 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		context.res,
 		authOptions
 	);
+	const _class = await getClassroomByGoogleId(context.query.id as string, {
+		include: {
+			checkins: {
+				where: {
+					student_id: session!.currUserId
+				},
+				orderBy: {
+					create_date: "desc"
+				},
+				take: 1
+			}
+		}
+	});
+	if (!_class) return sendError("Class not found");
+
 	return {
 		props: {
-			data: JSON.stringify(
-				await getClassroomByGoogleId(context.query.id as string, {
-					include: {
-						checkins: {
-							where: {
-								student_id: session!.currUserId
-							},
-							orderBy: {
-								create_date: "desc"
-							},
-							take: 1
-						}
-					}
-				})
-			)
+			data: JSON.stringify(_class)
 		}
 	};
 });
