@@ -1,6 +1,7 @@
 import { createCheckin } from "@/lib/database/checkin";
 import { getClassroomByGoogleId } from "@/lib/database/class";
 import { getUserById } from "@/lib/database/user";
+import dayjs from "dayjs";
 import { z, TypeOf } from "zod";
 import { procedure, router } from "..";
 
@@ -31,11 +32,27 @@ export const checkinRouter = router({
 			if (userId !== ctx.session.currUserId && !ctx.session.admin)
 				throw new Error("Can not create checkin for other user");
 
-			const _class = await getClassroomByGoogleId(classId);
+			const _class = await getClassroomByGoogleId(classId, {
+				include: {
+					checkins: {
+						where: {
+							student_id: userId
+						},
+						orderBy: {
+							create_date: "desc"
+						},
+						take: 1
+					}
+				}
+			});
 			if (!_class) throw new Error("Classroom not found");
 
 			const user = await getUserById(userId);
 			if (!user) throw new Error("User not found");
+
+			const lastCheckin = _class?.checkins?.[0];
+			if (lastCheckin && dayjs().isSame(lastCheckin.create_date, "day"))
+				throw new Error("Already checked in today");
 
 			return await createCheckin(
 				_class,
