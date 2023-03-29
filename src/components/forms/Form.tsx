@@ -19,7 +19,9 @@ export default function Form({
 	children,
 	...props
 }: Props) {
-	const { register, handleSubmit, formState } = useForm();
+	const { register, handleSubmit, formState } = useForm({
+		reValidateMode: "onSubmit"
+	});
 
 	return (
 		<form
@@ -39,6 +41,15 @@ export default function Form({
 								}
 						  })
 						: element;
+				})}
+			</div>
+			<div>
+				{Object.entries(formState.errors).map(([name, error]) => {
+					return error ? (
+						<div key={name} className="text-red-500 font-semibold">
+							{error.message as string}
+						</div>
+					) : undefined;
 				})}
 			</div>
 			<button
