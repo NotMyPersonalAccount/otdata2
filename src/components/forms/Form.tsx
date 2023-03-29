@@ -19,7 +19,7 @@ export default function Form({
 	children,
 	...props
 }: Props) {
-	const { register, handleSubmit, formState } = useForm({
+	const { register, handleSubmit, setError, formState } = useForm({
 		reValidateMode: "onSubmit"
 	});
 
@@ -27,7 +27,16 @@ export default function Form({
 		<form
 			{...props}
 			className={classNames("flex flex-col gap-4", className)}
-			onSubmit={handleSubmit(onSubmit)}
+			onSubmit={handleSubmit(async data => {
+				try {
+					await onSubmit(data);
+				} catch (e) {
+					setError("root", {
+						type: "server",
+						message: (e as Error).message
+					});
+				}
+			})}
 		>
 			<div className="flex flex-wrap justify-center lg:justify-between gap-4">
 				{Children.map(children, child => {
