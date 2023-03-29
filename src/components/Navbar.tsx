@@ -2,13 +2,13 @@ import hamburgerIcon from "../../public/hamburger.svg";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Link, { LinkProps } from "next/link";
 
 function NavbarLink(
 	props: LinkProps & {
-		children: React.ReactNode;
+		children: ReactNode;
 	}
 ) {
 	return <Link className="block" {...props} />;

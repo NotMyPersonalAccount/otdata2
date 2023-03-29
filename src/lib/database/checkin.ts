@@ -1,4 +1,5 @@
 import { GoogleClassroom, Prisma, User } from "@prisma/client";
+import prisma from ".";
 
 export async function createCheckin(
 	classroom: GoogleClassroom,
@@ -7,7 +8,7 @@ export async function createCheckin(
 	status: string,
 	working_on: string
 ) {
-	return await prisma?.checkin.create({
+	return await prisma.checkin.create({
 		data: {
 			google_classroom_id: classroom.google_classroom_id,
 			description,

@@ -13,7 +13,7 @@ export const authOptions: AuthOptions = {
 		async jwt({ token, user, account, profile, isNewUser }) {
 			if (user === undefined) return token;
 
-			const dbUser = await getUserBySchoolEmail(user!.email!);
+			const dbUser = await getUserBySchoolEmail(user.email!);
 			if (dbUser === null) {
 				//TODO: Create user
 				return token;
