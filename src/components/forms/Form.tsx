@@ -38,7 +38,7 @@ export default function Form({
 				}
 			})}
 		>
-			<div className="flex flex-wrap justify-center lg:justify-between gap-4">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max gap-4">
 				{Children.map(children, child => {
 					const element = child as ReactElement;
 					return element?.props?.name
