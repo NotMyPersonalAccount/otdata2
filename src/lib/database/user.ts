@@ -16,6 +16,7 @@ function getUserGetter<T extends keyof Prisma.UserWhereInput>(key: T) {
 	};
 }
 
+export const getUserById = getUserGetter("id");
 export const getUserByAeriesId = getUserGetter("aeries_id");
 export const getUserByGoogleId = getUserGetter("google_id");
 export const getUserBySchoolEmail = getUserGetter("ot_email");
