@@ -1,14 +1,33 @@
+import { CreateCheckinInput } from "@/lib/api/routers/checkin";
+import { trpc } from "@/lib/api/trpc";
+import { Checkin } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import Form from "./Form";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
 
 type Props = {
+	classId: string;
 	assignments: { [key: string]: any }[];
+	onCreate?: (checkin: Checkin) => void;
 };
 
-export default function CheckinForm({ assignments }: Props) {
+export default function CheckinForm({ classId, assignments, onCreate }: Props) {
+	const { data: session } = useSession();
+	const { mutateAsync: createCheckin } = trpc.checkin.create.useMutation();
 	return (
-		<Form onSubmit={async data => console.log(data)}>
+		<Form
+			onSubmit={async (data: CreateCheckinInput) => {
+				if (session) {
+					const checkin = await createCheckin({
+						...data,
+						classId,
+						userId: session.currUserId
+					});
+					if (onCreate) onCreate(checkin as Checkin);
+				}
+			}}
+		>
 			<FormSelect
 				name="status"
 				label="Were you productive since last class?"

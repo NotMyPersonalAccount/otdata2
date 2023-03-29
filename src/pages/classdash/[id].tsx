@@ -44,7 +44,7 @@ export default function ClassDash({ data }: Props) {
 		class_dict: Prisma.JsonObject;
 		coursework_dict: Prisma.JsonObject;
 	} = JSON.parse(data);
-	const [lastCheckin, setLastCheckin] = useState(_class.checkins[0]);
+	const [lastCheckin, setLastCheckin] = useState(_class?.checkins?.[0]);
 	return (
 		<div className="p-4 sm:px-12">
 			<h1 className="text-4xl font-bold mb-4">
@@ -52,37 +52,41 @@ export default function ClassDash({ data }: Props) {
 			</h1>
 			<div className="bg-gray-200 px-4 lg:px-12 py-8 rounded-xl">
 				<CheckinForm
+					classId={_class.google_classroom_id!}
 					assignments={
 						_class.coursework_dict!.courseWork as {
 							[key: string]: any;
 						}[]
 					}
+					onCreate={setLastCheckin}
 				/>
-				<div>
-					<p className="text-2xl font-semibold mt-8 mb-2">
-						Last Checkin
-					</p>
-					<p>
-						<span className="font-bold">Date: </span>
-						{dayjs(lastCheckin.create_date).fromNow()}
-					</p>
-					<p>
-						<span className="font-bold">
-							Were you productive?:{" "}
-						</span>
-						{lastCheckin.status}
-					</p>
-					<p>
-						<span className="font-bold">What you did: </span>
-						{lastCheckin.description}
-					</p>
-					<p>
-						<span className="font-bold">
-							What you said you would do:{" "}
-						</span>
-						{lastCheckin.working_on}
-					</p>
-				</div>
+				{lastCheckin && (
+					<div>
+						<p className="text-2xl font-semibold mt-8 mb-2">
+							Last Checkin
+						</p>
+						<p>
+							<span className="font-bold">Date: </span>
+							{dayjs(lastCheckin.create_date).fromNow()}
+						</p>
+						<p>
+							<span className="font-bold">
+								Were you productive?:{" "}
+							</span>
+							{lastCheckin.status}
+						</p>
+						<p>
+							<span className="font-bold">What you did: </span>
+							{lastCheckin.description}
+						</p>
+						<p>
+							<span className="font-bold">
+								What you said you would do:{" "}
+							</span>
+							{lastCheckin.working_on}
+						</p>
+					</div>
+				)}
 			</div>
 		</div>
 	);
