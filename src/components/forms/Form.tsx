@@ -1,20 +1,45 @@
 import classNames from "classnames";
-import { HTMLProps, ReactNode } from "react";
-import { FieldValues, FormState } from "react-hook-form";
+import {
+	Children,
+	createElement,
+	HTMLProps,
+	ReactElement,
+	ReactNode
+} from "react";
+import { FieldValues, useForm } from "react-hook-form";
 
-type Props = {
+type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
 	children: ReactNode;
-	formState: FormState<FieldValues>;
-} & HTMLProps<HTMLFormElement>;
+	onSubmit: (data: any) => Promise<void>;
+};
 
-export default function Form({ children, formState, ...props }: Props) {
+export default function Form({
+	className,
+	onSubmit,
+	children,
+	...props
+}: Props) {
+	const { register, handleSubmit, formState } = useForm();
+
 	return (
 		<form
 			{...props}
-			className={classNames("flex flex-col gap-4", props.className)}
+			className={classNames("flex flex-col gap-4", className)}
+			onSubmit={handleSubmit(onSubmit)}
 		>
 			<div className="flex flex-wrap justify-center lg:justify-between gap-4">
-				{children}
+				{Children.map(children, child => {
+					const element = child as ReactElement;
+					return element?.props?.name
+						? createElement(element.type, {
+								...{
+									...element.props,
+									register,
+									key: element.props.name
+								}
+						  })
+						: element;
+				})}
 			</div>
 			<button
 				className="px-2 py-2 w-24 h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"

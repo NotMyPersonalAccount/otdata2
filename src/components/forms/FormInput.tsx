@@ -1,18 +1,19 @@
-import { ForwardedRef, forwardRef, Ref } from "react";
-import { FieldRefs, RefCallBack, UseFormRegisterReturn } from "react-hook-form";
+import { FieldValues, RegisterOptions, UseFormRegister } from "react-hook-form";
 
 type Props = {
+	register?: UseFormRegister<FieldValues>;
+	name: string;
 	label: string;
-	options: UseFormRegisterReturn<string>;
+	options?: RegisterOptions;
 };
 
-export default function FormInput({ label, options }: Props) {
+export default function FormInput({ register, name, label, options }: Props) {
 	return (
 		<div className="flex flex-col gap-2 w-64 md:w-96">
 			<label className="text-lg font-semibold">{label}</label>
 			<input
 				className="outline outline-1 outline-black hover:outline-2 hover:outline-blue-500 focus:outline-2 focus:outline-blue-500 px-2 py-2 rounded-md"
-				{...options}
+				{...register!(name, options)}
 			/>
 		</div>
 	);

@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import Form from "./Form";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
@@ -8,19 +7,12 @@ type Props = {
 };
 
 export default function CheckinForm({ assignments }: Props) {
-	const { register, handleSubmit, formState } = useForm();
-
 	return (
-		<Form
-			onSubmit={handleSubmit(async data => {
-				await new Promise(resolve => setTimeout(resolve, 2000));
-				console.log(data);
-			})}
-			formState={formState}
-		>
+		<Form onSubmit={async data => console.log(data)}>
 			<FormSelect
+				name="status"
 				label="Were you productive since last class?"
-				options={register("status")}
+				options={{ required: "Fill in productivity" }}
 			>
 				<option value="5">Very Productive</option>
 				<option value="4">Mostly</option>
@@ -29,8 +21,9 @@ export default function CheckinForm({ assignments }: Props) {
 				<option value="1">Not</option>
 			</FormSelect>
 			<FormSelect
+				name="assignment"
 				label="What assignment are you working on?"
-				options={register("assignment")}
+				options={{ required: "Fill in what you are working on" }}
 			>
 				{assignments.map((assignment, i) => {
 					return (
@@ -41,12 +34,15 @@ export default function CheckinForm({ assignments }: Props) {
 				})}
 			</FormSelect>
 			<FormInput
+				name="working_on"
 				label="What have you done since the last class?"
-				options={register("working_on")}
+				options={{
+					required: "Fill in what you have done since last classs"
+				}}
 			/>
 			<FormInput
+				name="working_on_other"
 				label="If you chose other, what are you going to do?"
-				options={register("working_on_other")}
 			/>
 		</Form>
 	);
