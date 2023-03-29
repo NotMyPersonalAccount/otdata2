@@ -5,11 +5,16 @@ import { sendError } from "@/utils/error_handling";
 import { Checkin, GoogleClassroom, Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 type Props = {
 	data: string;
+};
+
+type CheckinValueProps = {
+	label: string;
+	children: ReactNode;
 };
 
 export const getServerSideProps = enforceAuthentication(async context => {
@@ -40,6 +45,15 @@ export const getServerSideProps = enforceAuthentication(async context => {
 	};
 });
 
+function CheckinValue({ label, children }: CheckinValueProps) {
+	return (
+		<p className="break-all">
+			<span className="font-bold">{label}: </span>
+			{children}
+		</p>
+	);
+}
+
 export default function ClassDash({ data }: Props) {
 	const _class: GoogleClassroom & {
 		checkins: Checkin[];
@@ -67,26 +81,18 @@ export default function ClassDash({ data }: Props) {
 						<p className="text-2xl font-semibold mt-8 mb-2">
 							Last Checkin
 						</p>
-						<p>
-							<span className="font-bold">Date: </span>
+						<CheckinValue label="Date">
 							{dayjs(lastCheckin.create_date).fromNow()}
-						</p>
-						<p>
-							<span className="font-bold">
-								Were you productive?:{" "}
-							</span>
+						</CheckinValue>
+						<CheckinValue label="Were you productive?">
 							{lastCheckin.status}
-						</p>
-						<p>
-							<span className="font-bold">What you did: </span>
+						</CheckinValue>
+						<CheckinValue label="What you did">
 							{lastCheckin.description}
-						</p>
-						<p>
-							<span className="font-bold">
-								What you said you would do:{" "}
-							</span>
+						</CheckinValue>
+						<CheckinValue label="What you said you would do">
 							{lastCheckin.working_on}
-						</p>
+						</CheckinValue>
 					</div>
 				)}
 			</div>
