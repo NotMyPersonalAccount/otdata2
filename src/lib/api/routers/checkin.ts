@@ -1,6 +1,7 @@
 import { createCheckin } from "@/lib/database/checkin";
 import { getClassroomByGoogleId } from "@/lib/database/class";
 import { getUserById } from "@/lib/database/user";
+import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { z, TypeOf } from "zod";
 import { procedure, router } from "..";
@@ -55,8 +56,10 @@ export const checkinRouter = router({
 				throw new Error("Already checked in today");
 
 			return await createCheckin(
-				_class,
-				user,
+				_class.id,
+				(_class.class_dict as Prisma.JsonObject).name as string,
+				_class.google_classroom_id!,
+				user.id,
 				working_on,
 				status,
 				assignment + " " + working_on_other
