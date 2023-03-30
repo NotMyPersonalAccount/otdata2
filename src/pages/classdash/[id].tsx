@@ -1,4 +1,6 @@
+import Button from "@/components/Button";
 import CheckinForm from "@/components/forms/CheckinForm";
+import { trpc } from "@/lib/api/trpc";
 import { getClassroomByGoogleId } from "@/lib/database/class";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { sendError } from "@/utils/error_handling";
@@ -61,6 +63,7 @@ export default function ClassDash({ data }: Props) {
 		coursework_dict: Prisma.JsonObject;
 	} = JSON.parse(data);
 	const [lastCheckin, setLastCheckin] = useState(_class?.checkins?.[0]);
+	const { mutateAsync: deleteCheckin } = trpc.checkin.delete.useMutation();
 	return (
 		<div className="p-4 sm:px-12">
 			<h1 className="text-4xl font-bold mb-4">
@@ -93,6 +96,18 @@ export default function ClassDash({ data }: Props) {
 						<CheckinValue label="What you said you would do">
 							{lastCheckin.working_on}
 						</CheckinValue>
+						<Button
+							className="mt-4 bg-red-400 hover:bg-red-500"
+							onClick={async () => {
+								const newLastCheckin = await deleteCheckin({
+									id: lastCheckin.id,
+									respondWithLast: true
+								});
+								setLastCheckin(newLastCheckin as Checkin);
+							}}
+						>
+							Delete Last Checkin
+						</Button>
 					</div>
 				)}
 			</div>
