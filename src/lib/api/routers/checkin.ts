@@ -40,17 +40,6 @@ export const checkinRouter = router({
 			const _class = await prisma.googleClassroom.findUnique({
 				where: {
 					google_classroom_id: classId
-				},
-				include: {
-					checkins: {
-						where: {
-							student_id: userId
-						},
-						orderBy: {
-							create_date: "desc"
-						},
-						take: 1
-					}
 				}
 			});
 			if (!_class) throw new Error("Classroom not found");
@@ -62,7 +51,15 @@ export const checkinRouter = router({
 			});
 			if (!user) throw new Error("User not found");
 
-			const lastCheckin = _class?.checkins?.[0];
+			const lastCheckin = await prisma.checkin.findFirst({
+				where: {
+					google_classroom_id: classId,
+					student_id: userId
+				},
+				orderBy: {
+					create_date: "desc"
+				}
+			});
 			if (lastCheckin && dayjs().isSame(lastCheckin.create_date, "day"))
 				throw new Error("Already checked in today");
 
