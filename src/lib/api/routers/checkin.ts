@@ -1,4 +1,9 @@
-import { createCheckin } from "@/lib/database/checkin";
+import {
+	createCheckin,
+	deleteCheckin,
+	getCheckin,
+	getLastCheckin
+} from "@/lib/database/checkin";
 import { getClassroomByGoogleId } from "@/lib/database/class";
 import { getUserById } from "@/lib/database/user";
 import { Prisma } from "@prisma/client";
@@ -15,6 +20,12 @@ const createCheckinSchema = z.object({
 	working_on_other: z.string()
 });
 export type CreateCheckinInput = TypeOf<typeof createCheckinSchema>;
+
+const deleteCheckinSchema = z.object({
+	id: z.string(),
+	respondWithLast: z.boolean()
+});
+export type DeleteCheckinInput = TypeOf<typeof deleteCheckinSchema>;
 
 export const checkinRouter = router({
 	create: procedure
@@ -64,6 +75,31 @@ export const checkinRouter = router({
 				status,
 				assignment + " " + working_on_other
 			);
+		}),
+	delete: procedure
+		.input(deleteCheckinSchema)
+		.mutation(async ({ input, ctx }) => {
+			const { id, respondWithLast } = input;
+
+			if (!ctx.session) throw new Error("Not logged in");
+
+			const checkin = await getCheckin(id);
+			if (!checkin) throw new Error("Checkin not found");
+
+			if (
+				checkin.student_id !== ctx.session.currUserId &&
+				!ctx.session.admin
+			)
+				throw new Error("Can not delete checkin for other user");
+
+			await deleteCheckin(id);
+			if (respondWithLast) {
+				return await getLastCheckin(
+					checkin.google_classroom_id!,
+					checkin.student_id
+				);
+			}
+			return true;
 		})
 });
 
