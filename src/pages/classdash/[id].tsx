@@ -12,6 +12,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 
 type Props = {
 	data: string;
+	lastCheckinData: string;
 };
 
 type CheckinValueProps = {
@@ -25,27 +26,28 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		context.res,
 		authOptions
 	);
+
 	const _class = await prisma.googleClassroom.findFirst({
 		where: {
 			google_classroom_id: context.query.id as string
-		},
-		include: {
-			checkins: {
-				where: {
-					student_id: session!.currUserId
-				},
-				orderBy: {
-					create_date: "desc"
-				},
-				take: 1
-			}
 		}
 	});
 	if (!_class) return sendError("Class not found");
 
+	const lastCheckinData = await prisma.checkin.findFirst({
+		where: {
+			classroom_id: _class.id,
+			student_id: session!.currUserId
+		},
+		orderBy: {
+			create_date: "desc"
+		}
+	});
+	
 	return {
 		props: {
-			data: JSON.stringify(_class)
+			data: JSON.stringify(_class),
+			lastCheckinData: JSON.stringify(lastCheckinData)
 		}
 	};
 });
@@ -59,13 +61,13 @@ function CheckinValue({ label, children }: CheckinValueProps) {
 	);
 }
 
-export default function ClassDash({ data }: Props) {
+export default function ClassDash({ data, lastCheckinData }: Props) {
 	const _class: GoogleClassroom & {
 		checkins: Checkin[];
 		class_dict: Prisma.JsonObject;
 		coursework_dict: Prisma.JsonObject;
 	} = JSON.parse(data);
-	const [lastCheckin, setLastCheckin] = useState(_class?.checkins?.[0]);
+	const [lastCheckin, setLastCheckin] = useState(JSON.parse(lastCheckinData));
 	const { mutateAsync: deleteCheckin } = trpc.checkin.delete.useMutation();
 	return (
 		<div className="p-4 sm:px-12">
