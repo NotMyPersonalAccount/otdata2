@@ -11,7 +11,7 @@ export default function Button({ className, ...props }: Props) {
 		<button
 			className={classNames(
 				className,
-				"px-2 py-2 w-24 h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
+				"px-2 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
 			)}
 			{...props}
 		></button>
