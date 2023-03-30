@@ -6,7 +6,7 @@ import {
 	useState
 } from "react";
 
-type Props = { loading: boolean } & DetailedHTMLProps<
+type Props = { loading?: boolean } & DetailedHTMLProps<
 	ButtonHTMLAttributes<HTMLButtonElement>,
 	HTMLButtonElement
 >;
@@ -16,8 +16,8 @@ export default function Button({
 	loading: initiallyLoading,
 	...props
 }: Props) {
-	const [loading, setLoading] = useState(initiallyLoading);
-	useMemo(() => setLoading(initiallyLoading), [initiallyLoading]);
+	const [loading, setLoading] = useState(initiallyLoading ?? false);
+	useMemo(() => setLoading(initiallyLoading!), [initiallyLoading]);
 
 	return (
 		<button
@@ -55,7 +55,9 @@ export default function Button({
 					</svg>
 				</div>
 			)}
-			<div className={classNames({"h-0 invisible": loading})}>{props.children}</div>
+			<div className={classNames({ "h-0 invisible": loading })}>
+				{props.children}
+			</div>
 		</button>
 	);
 }
