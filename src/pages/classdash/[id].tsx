@@ -68,7 +68,6 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 		coursework_dict: Prisma.JsonObject;
 	} = JSON.parse(data);
 	const [lastCheckin, setLastCheckin] = useState(JSON.parse(lastCheckinData));
-	const { mutateAsync: deleteCheckin } = trpc.checkin.delete.useMutation();
 	return (
 		<div className="p-4 sm:px-12">
 			<h1 className="text-4xl font-bold mb-4">
@@ -104,7 +103,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 						<Button
 							className="mt-4 bg-red-400 hover:bg-red-500"
 							onClick={async () => {
-								const newLastCheckin = await deleteCheckin({
+								const newLastCheckin = await trpc.checkin.delete.mutate({
 									id: lastCheckin.id,
 									respondWithLast: true
 								});

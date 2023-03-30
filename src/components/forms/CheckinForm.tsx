@@ -14,12 +14,11 @@ type Props = {
 
 export default function CheckinForm({ classId, assignments, onCreate }: Props) {
 	const { data: session } = useSession();
-	const { mutateAsync: createCheckin } = trpc.checkin.create.useMutation();
 	return (
 		<Form
 			onSubmit={async (data: CreateCheckinInput) => {
 				if (session) {
-					const checkin = await createCheckin({
+					const checkin = await trpc.checkin.create.mutate({
 						...data,
 						classId,
 						userId: session.currUserId

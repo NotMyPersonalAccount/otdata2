@@ -8,7 +8,7 @@ import type { AppProps } from "next/app";
 
 dayjs.extend(relativeTime);
 
-function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 	return (
 		<SessionProvider session={session}>
 			<Navbar />
@@ -16,6 +16,3 @@ function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 		</SessionProvider>
 	);
 }
-
-export default trpc.withTRPC(App);
-
