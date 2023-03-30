@@ -24,7 +24,7 @@ export default function Button({
 			{...props}
 			className={classNames(
 				className,
-				"px-2 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
+				"px-4 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
 			)}
 			disabled={props.disabled || loading}
 			onClick={async event => {
