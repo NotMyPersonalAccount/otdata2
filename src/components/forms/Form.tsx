@@ -7,6 +7,7 @@ import {
 	ReactNode
 } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import Button from "../Button";
 
 type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
 	children: ReactNode;
@@ -61,10 +62,7 @@ export default function Form({
 					) : undefined;
 				})}
 			</div>
-			<button
-				className="px-2 py-2 w-24 h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
-				disabled={formState.isSubmitting}
-			>
+			<Button disabled={formState.isSubmitting}>
 				{formState.isSubmitting ? (
 					<div className="flex justify-center">
 						<svg
@@ -87,7 +85,7 @@ export default function Form({
 				) : (
 					"Submit"
 				)}
-			</button>
+			</Button>
 		</form>
 	);
 }
