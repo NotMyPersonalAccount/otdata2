@@ -10,11 +10,13 @@ import { FieldValues, useForm } from "react-hook-form";
 import Button from "../Button";
 
 type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
+	submitLabel?: string;
 	children: ReactNode;
 	onSubmit: (data: any) => Promise<void>;
 };
 
 export default function Form({
+	submitLabel,
 	className,
 	onSubmit,
 	children,
@@ -62,7 +64,9 @@ export default function Form({
 					) : undefined;
 				})}
 			</div>
-			<Button loading={formState.isSubmitting}>Submit</Button>
+			<Button loading={formState.isSubmitting}>
+				{submitLabel ?? "Submit"}
+			</Button>
 		</form>
 	);
 }
