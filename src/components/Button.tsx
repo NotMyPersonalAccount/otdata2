@@ -35,7 +35,7 @@ export default function Button({
 				}
 			}}
 		>
-			{loading ? (
+			{loading && (
 				<div className="flex justify-center">
 					<svg
 						aria-hidden="true"
@@ -54,9 +54,8 @@ export default function Button({
 						/>
 					</svg>
 				</div>
-			) : (
-				props.children
 			)}
+			<div className={classNames({"h-0 invisible": loading})}>{props.children}</div>
 		</button>
 	);
 }
