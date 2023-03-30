@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import CheckinForm from "@/components/forms/CheckinForm";
 import { trpc } from "@/lib/api/trpc";
-import { getClassroomByGoogleId } from "@/lib/database/class";
+import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { sendError } from "@/utils/error_handling";
 import { Checkin, GoogleClassroom, Prisma } from "@prisma/client";
@@ -25,7 +25,10 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		context.res,
 		authOptions
 	);
-	const _class = await getClassroomByGoogleId(context.query.id as string, {
+	const _class = await prisma.googleClassroom.findFirst({
+		where: {
+			google_classroom_id: context.query.id as string
+		},
 		include: {
 			checkins: {
 				where: {

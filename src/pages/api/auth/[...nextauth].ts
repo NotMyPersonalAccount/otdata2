@@ -1,4 +1,4 @@
-import { getUserBySchoolEmail } from "@/lib/database/user";
+import prisma from "@/lib/database/prisma";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -13,7 +13,11 @@ export const authOptions: AuthOptions = {
 		async jwt({ token, user, account, profile, isNewUser }) {
 			if (user === undefined) return token;
 
-			const dbUser = await getUserBySchoolEmail(user.email!);
+			const dbUser = await prisma.user.findFirst({
+				where: {
+					ot_email: user.email!
+				}
+			});
 			if (dbUser === null) {
 				//TODO: Create user
 				return token;

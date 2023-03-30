@@ -1,4 +1,4 @@
-import { getEnrollmentByUser } from "@/lib/database/class";
+import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -28,7 +28,16 @@ export const getServerSideProps = enforceAuthentication(async context => {
 	);
 	return {
 		props: {
-			data: JSON.stringify(await getEnrollmentByUser(session!.currUserId))
+			data: JSON.stringify(
+				await prisma.gEnrollment.findMany({
+					where: {
+						owner_id: session!.currUserId
+					},
+					include: {
+						google_classroom: true
+					}
+				})
+			)
 		}
 	};
 });

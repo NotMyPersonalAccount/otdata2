@@ -1,11 +1,4 @@
-import {
-	createCheckin,
-	deleteCheckin,
-	getCheckin,
-	getLastCheckin
-} from "@/lib/database/checkin";
-import { getClassroomByGoogleId } from "@/lib/database/class";
-import { getUserById } from "@/lib/database/user";
+import prisma from "@/lib/database/prisma";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { z, TypeOf } from "zod";
@@ -44,7 +37,10 @@ export const checkinRouter = router({
 			if (userId !== ctx.session.currUserId && !ctx.session.admin)
 				throw new Error("Can not create checkin for other user");
 
-			const _class = await getClassroomByGoogleId(classId, {
+			const _class = await prisma.googleClassroom.findUnique({
+				where: {
+					google_classroom_id: classId
+				},
 				include: {
 					checkins: {
 						where: {
@@ -59,22 +55,30 @@ export const checkinRouter = router({
 			});
 			if (!_class) throw new Error("Classroom not found");
 
-			const user = await getUserById(userId);
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId
+				}
+			});
 			if (!user) throw new Error("User not found");
 
 			const lastCheckin = _class?.checkins?.[0];
 			if (lastCheckin && dayjs().isSame(lastCheckin.create_date, "day"))
 				throw new Error("Already checked in today");
 
-			return await createCheckin(
-				_class.id,
-				(_class.class_dict as Prisma.JsonObject).name as string,
-				_class.google_classroom_id!,
-				user.id,
-				working_on,
-				status,
-				assignment + " " + working_on_other
-			);
+			return await prisma.checkin.create({
+				data: {
+					google_classroom_id: _class.google_classroom_id,
+					description: assignment + " " + working_on_other,
+					status,
+					working_on,
+					student_id: user.id,
+					google_classroom_name: (
+						_class.class_dict as Prisma.JsonObject
+					).name as string,
+					classroom_id: _class.id
+				}
+			});
 		}),
 	delete: procedure
 		.input(deleteCheckinSchema)
@@ -83,7 +87,11 @@ export const checkinRouter = router({
 
 			if (!ctx.session) throw new Error("Not logged in");
 
-			const checkin = await getCheckin(id);
+			const checkin = await prisma.checkin.findUnique({
+				where: {
+					id
+				}
+			});
 			if (!checkin) throw new Error("Checkin not found");
 
 			if (
@@ -92,12 +100,21 @@ export const checkinRouter = router({
 			)
 				throw new Error("Can not delete checkin for other user");
 
-			await deleteCheckin(id);
+			await prisma.checkin.delete({
+				where: {
+					id
+				}
+			});
 			if (respondWithLast) {
-				return await getLastCheckin(
-					checkin.google_classroom_id!,
-					checkin.student_id
-				);
+				return await prisma.checkin.findFirst({
+					where: {
+						google_classroom_id: checkin.google_classroom_id!,
+						student_id: checkin.student_id
+					},
+					orderBy: {
+						create_date: "desc"
+					}
+				});
 			}
 			return true;
 		})

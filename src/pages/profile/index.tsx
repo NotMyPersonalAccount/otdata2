@@ -1,4 +1,4 @@
-import { getUserByAeriesId } from "@/lib/database/user";
+import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -24,7 +24,13 @@ export const getServerSideProps = enforceAuthentication(async context => {
 	);
 	return {
 		props: {
-			data: JSON.stringify(await getUserByAeriesId(session!.aeriesid))
+			data: JSON.stringify(
+				await prisma.user.findUnique({
+					where: {
+						aeries_id: session!.aeriesid
+					}
+				})
+			)
 		}
 	};
 });
@@ -63,8 +69,7 @@ export default function Profile({ data }: Props) {
 							<span className="ml-2">
 								<p>{user.aeries_street}</p>
 								<p>
-									{user.aeries_city}, {user.aeries_state}
-									{" "}
+									{user.aeries_city}, {user.aeries_state}{" "}
 									{user.aeries_zipcode}
 								</p>
 							</span>
