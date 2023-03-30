@@ -9,7 +9,7 @@ export const getServerSideProps = enforceTeacher(async context => {
 
 	return {
 		props: {
-			data: user
+			data: JSON.stringify(user)
 		}
 	};
 });
