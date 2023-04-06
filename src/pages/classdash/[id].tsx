@@ -80,9 +80,9 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 				<CheckinForm
 					classId={_class.google_classroom_id!}
 					assignments={
-						_class.coursework_dict!.courseWork as {
+						(_class.coursework_dict?.courseWork as {
 							[key: string]: any;
-						}[]
+						}[]) ?? []
 					}
 					onCreate={setLastCheckin}
 				/>
