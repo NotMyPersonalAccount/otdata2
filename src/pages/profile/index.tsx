@@ -27,7 +27,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 			data: JSON.stringify(
 				await prisma.user.findUnique({
 					where: {
-						aeries_id: session!.aeriesId
+						id: session!.currUserId
 					}
 				})
 			)
