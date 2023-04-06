@@ -52,10 +52,16 @@ export default function Navbar() {
 					/>
 				</button>
 			</div>
-			<div className={classNames("my-2 md:flex gap-2")}>
+			<div className={classNames("my-2 md:flex gap-4")}>
 				{status == "authenticated" ? (
 					<>
-						<NavbarLink href="/checkin">Classes</NavbarLink>
+						{session.role === "Teacher" && (
+							<NavbarLink href="/findstudent">Find</NavbarLink>
+						)}
+						{(session.role === "Student" ||
+							session.role === "Teacher") && (
+							<NavbarLink href="/checkin">Classes</NavbarLink>
+						)}
 						<NavbarLink href="/profile">{session.name}</NavbarLink>
 						<button onClick={() => signOut({ callbackUrl: "/" })}>
 							Logout
