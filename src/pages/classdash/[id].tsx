@@ -7,7 +7,7 @@ import { sendError } from "@/utils/error_handling";
 import { Checkin, GoogleClassroom, Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 type Props = {
@@ -43,7 +43,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 			create_date: "desc"
 		}
 	});
-	
+
 	return {
 		props: {
 			data: JSON.stringify(_class),
@@ -67,7 +67,10 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 		class_dict: Prisma.JsonObject;
 		coursework_dict: Prisma.JsonObject;
 	} = JSON.parse(data);
-	const [lastCheckin, setLastCheckin] = useState(JSON.parse(lastCheckinData));
+	const [lastCheckin, setLastCheckin] = useState<Checkin>();
+	useEffect(() => {
+		setLastCheckin(JSON.parse(lastCheckinData));
+	}, [lastCheckinData]);
 	return (
 		<div className="p-4 sm:px-12">
 			<h1 className="text-4xl font-bold mb-4">
@@ -103,10 +106,11 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 						<Button
 							className="mt-4 bg-red-400 hover:bg-red-500"
 							onClick={async () => {
-								const newLastCheckin = await trpc.checkin.delete.mutate({
-									id: lastCheckin.id,
-									respondWithLast: true
-								});
+								const newLastCheckin =
+									await trpc.checkin.delete.mutate({
+										id: lastCheckin.id,
+										respondWithLast: true
+									});
 								setLastCheckin(newLastCheckin as Checkin);
 							}}
 						>
