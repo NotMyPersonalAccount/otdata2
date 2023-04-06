@@ -14,7 +14,7 @@ export const userRouter = router({
 		const { first_name, last_name, aeries_id } = input;
 
 		if (!ctx.session) throw new Error("Not logged in");
-		if (!ctx.session.admin) throw new Error("Not authorized");
+		if (!ctx.session.admin && !ctx.session.originalData) throw new Error("Not authorized");
 
 		return await prisma.user.findMany({
 			where: {
