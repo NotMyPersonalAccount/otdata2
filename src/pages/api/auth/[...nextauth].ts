@@ -26,7 +26,8 @@ export const authOptions: AuthOptions = {
 					admin: dbUser.is_admin!,
 					role: dbUser.role!,
 					currUserId: dbUser.id,
-					aeriesid: dbUser.aeries_id!
+					aeriesId: dbUser.aeries_id!,
+					name: `${dbUser.first_name} ${dbUser.last_name}`
 				};
 			} else {
 				token.otdata = {

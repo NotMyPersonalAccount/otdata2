@@ -56,9 +56,7 @@ export default function Navbar() {
 				{status == "authenticated" ? (
 					<>
 						<NavbarLink href="/checkin">Classes</NavbarLink>
-						<NavbarLink href="/profile">
-							{session?.user?.name}
-						</NavbarLink>
+						<NavbarLink href="/profile">{session.name}</NavbarLink>
 						<button onClick={() => signOut({ callbackUrl: "/" })}>
 							Logout
 						</button>

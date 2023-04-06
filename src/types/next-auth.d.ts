@@ -5,7 +5,8 @@ type ExtraSessionInfo = {
 	admin: boolean;
 	role: string;
 	currUserId: string;
-	aeriesid: number;
+	aeriesId: number;
+	name: string;
 	originalData?: ExtraSessionInfo;
 };
 
