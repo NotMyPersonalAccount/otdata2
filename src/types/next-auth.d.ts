@@ -4,8 +4,9 @@ import { DefaultJWT } from "next-auth/jwt";
 type ExtraSessionInfo = {
 	admin: boolean;
 	role: string;
-	currUserId: string,
+	currUserId: string;
 	aeriesid: number;
+	originalData?: ExtraSessionInfo;
 };
 
 declare module "next-auth" {

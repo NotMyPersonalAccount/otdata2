@@ -16,7 +16,7 @@ specifiers:
   eslint: 8.37.0
   eslint-config-next: 13.2.4
   next: 13.2.4
-  next-auth: ^4.20.1
+  next-auth: ^4.21.0
   postcss: ^8.4.21
   prettier: ^2.8.7
   prisma: ^4.12.0
@@ -38,7 +38,7 @@ dependencies:
   classnames: 2.3.2
   dayjs: 1.11.7
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
-  next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
+  next-auth: 4.21.0_ld2jel3hspngo3u5lti2kgl2sq
   prisma: 4.12.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -1860,8 +1860,8 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next-auth/4.20.1_ld2jel3hspngo3u5lti2kgl2sq:
-    resolution: {integrity: sha512-ZcTUN4qzzZ/zJYgOW0hMXccpheWtAol8QOMdMts+LYRcsPGsqf2hEityyaKyECQVw1cWInb9dF3wYwI5GZdEmQ==}
+  /next-auth/4.21.0_ld2jel3hspngo3u5lti2kgl2sq:
+    resolution: {integrity: sha512-KbqFQAPG5GVqszrjMFv5LXAkpmG1hs9sOkC6T+DshmfJ8COm3y/rIdIw9nEEZ17lqZNXy2/1+mVmwVDrPbLeng==}
     peerDependencies:
       next: ^12.2.5 || ^13
       nodemailer: ^6.6.5
@@ -1878,8 +1878,8 @@ packages:
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       oauth: 0.9.15
       openid-client: 5.4.0
-      preact: 10.13.1
-      preact-render-to-string: 5.2.6_preact@10.13.1
+      preact: 10.13.2
+      preact-render-to-string: 5.2.6_preact@10.13.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       uuid: 8.3.2
@@ -2209,17 +2209,17 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preact-render-to-string/5.2.6_preact@10.13.1:
+  /preact-render-to-string/5.2.6_preact@10.13.2:
     resolution: {integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.13.1
+      preact: 10.13.2
       pretty-format: 3.8.0
     dev: false
 
-  /preact/10.13.1:
-    resolution: {integrity: sha512-KyoXVDU5OqTpG9LXlB3+y639JAGzl8JSBXLn1J9HTSB3gbKcuInga7bZnXLlxmK94ntTs1EFeZp0lrja2AuBYQ==}
+  /preact/10.13.2:
+    resolution: {integrity: sha512-q44QFLhOhty2Bd0Y46fnYW0gD/cbVM9dUVtNTDKPcdXSMA7jfY+Jpd6rk3GB0lcQss0z5s/6CmVP0Z/hV+g6pw==}
     dev: false
 
   /prelude-ls/1.2.1:
