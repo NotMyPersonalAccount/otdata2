@@ -43,6 +43,7 @@ export default function CheckinForm({ classId, assignments, onCreate }: Props) {
 				label="What assignment are you working on?"
 				options={{ required: "Fill in what you are working on" }}
 			>
+				<option value="other">Other</option>
 				{assignments.map((assignment, i) => {
 					return (
 						<option key={i} value={assignment.title}>
