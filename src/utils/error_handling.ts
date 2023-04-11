@@ -23,7 +23,7 @@ export function sendError(error: string): { props: { error: string } } {
 
 export async function forceLogin(context: GetServerSidePropsContext) {
 	const { req, res } = context;
-	const { cookies, url } = req;
+	const { cookies, headers, url } = req;
 
 	const { options, cookies: initCookies } = await init({
 		action: "signin",
@@ -31,6 +31,9 @@ export async function forceLogin(context: GetServerSidePropsContext) {
 		callbackUrl: url,
 		cookies,
 		csrfToken: await getCsrfToken({ req }),
+		host: `${process.env.NODE_ENV === "development" ? "http" : "https"}://${
+			headers["host"]
+		}`,
 		isPost: true,
 		providerId: "google"
 	});
