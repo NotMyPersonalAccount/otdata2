@@ -4,6 +4,7 @@ import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { Page, PageSection } from "@/components/Page";
 
 type Props = {
 	data: string;
@@ -37,9 +38,9 @@ export const getServerSideProps = enforceAuthentication(async context => {
 
 function ProfileSection({ title, children }: ProfileSectionProps) {
 	return (
-		<div className="bg-gray-200 rounded-xl px-8 py-4 w-80">
+		<div className="flex flex-col gap-2">
 			<h1 className="text-2xl font-bold">{title}</h1>
-			{children}
+			<div className="bg-gray-200 rounded-xl px-8 py-4 grow">{children}</div>
 		</div>
 	);
 }
@@ -58,12 +59,12 @@ function ProfileInfo({ title, children }: ProfileInfoProps) {
 export default function Profile({ data }: Props) {
 	const user: User = JSON.parse(data);
 	return (
-		<div className="mx-6 my-6">
-			<h1 className="text-4xl">
-				{user.first_name} {user.last_name} ({user.pronouns})
-			</h1>
-			<div className="ml-2 my-4">
-				<div className="flex flex-wrap gap-4">
+		<Page>
+			<PageSection
+				title={`${user.first_name} ${user.last_name} (${user.pronouns})`}
+				transparent={true}
+			>
+				<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8">
 					<ProfileSection title="General">
 						<ProfileInfo title="Address">
 							<span className="ml-2">
@@ -85,8 +86,8 @@ export default function Profile({ data }: Props) {
 						</ProfileInfo>
 					</ProfileSection>
 				</div>
-			</div>
-		</div>
+			</PageSection>
+		</Page>
 	);
 }
 

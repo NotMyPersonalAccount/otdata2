@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
 import { ReactNode, useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { Page, PageSection } from "@/components/Page";
 
 type Props = {
 	data: string;
@@ -72,11 +73,8 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 		setLastCheckin(JSON.parse(lastCheckinData));
 	}, [lastCheckinData]);
 	return (
-		<div className="p-4 sm:px-12">
-			<h1 className="text-4xl font-bold mb-4">
-				{_class.class_dict!.name as string}
-			</h1>
-			<div className="bg-gray-200 px-4 lg:px-12 py-8 rounded-xl">
+		<Page>
+			<PageSection title={_class.class_dict!.name as string} padded={true}>
 				<CheckinForm
 					classId={_class.google_classroom_id!}
 					assignments={
@@ -118,8 +116,8 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 						</Button>
 					</div>
 				)}
-			</div>
-		</div>
+			</PageSection>
+		</Page>
 	);
 }
 

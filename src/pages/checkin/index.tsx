@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { Page, PageSection } from "@/components/Page";
 
 type ParsedClass = {
 	id: string;
@@ -85,14 +86,13 @@ function Class({ id, name, status, teacherName }: ParsedClass) {
 
 export default function ClassList({ classes }: Props) {
 	return (
-		<div className="p-4 sm:p-12 xl:px-48">
-			<h1 className="text-4xl font-bold mb-4">Your Classes</h1>
-			<div className="bg-gray-200 mx-1 sm:mx-2 rounded-lg">
+		<Page>
+			<PageSection title="Your Classes">
 				{classes.map(c => (
 					<Class key={c.id} {...c} />
 				))}
-			</div>
-		</div>
+			</PageSection>
+		</Page>
 	);
 }
 
