@@ -52,7 +52,7 @@ export default function Navbar() {
 					/>
 				</button>
 			</div>
-			<div className={classNames("my-2 md:flex gap-4")}>
+			<div className="my-2 md:flex gap-4 text-lg">
 				{status == "authenticated" ? (
 					<>
 						{session.role === "Teacher" && (
