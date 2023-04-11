@@ -41,7 +41,7 @@ export function enforceAuthentication<T>(
 			context.res,
 			authOptions
 		);
-		if (session === null) return forceLogin();
+		if (session === null) return await forceLogin(context);
 		return innerFn ? innerFn(context) : { props: {} };
 	};
 }
