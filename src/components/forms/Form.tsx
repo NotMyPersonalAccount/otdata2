@@ -1,12 +1,18 @@
 import classNames from "classnames";
 import {
 	Children,
+	cloneElement,
 	createElement,
 	HTMLProps,
-	ReactElement,
+	isValidElement,
 	ReactNode
 } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import {
+	Control,
+	FieldValues,
+	useForm,
+	UseFormRegister
+} from "react-hook-form";
 import Button from "../Button";
 
 type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
@@ -15,6 +21,28 @@ type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
 	onSubmit: (data: any) => Promise<void>;
 };
 
+function addFormProps(
+	children: ReactNode,
+	register: UseFormRegister<FieldValues>,
+	control: Control
+) {
+	return Children.map(children, (child: ReactNode): ReactNode => {
+		if (!isValidElement(child)) return child;
+
+		if (child.props.name)
+			return createElement(child.type, {
+				...child.props,
+				register,
+				control
+			});
+		if (child.props.children)
+			return cloneElement<typeof child.props>(child, {
+				children: addFormProps(child.props.children, register, control)
+			});
+		return child;
+	});
+}
+
 export default function Form({
 	submitLabel,
 	className,
@@ -22,7 +50,7 @@ export default function Form({
 	children,
 	...props
 }: Props) {
-	const { register, handleSubmit, setError, formState } = useForm({
+	const { control, register, handleSubmit, setError, formState } = useForm({
 		reValidateMode: "onSubmit"
 	});
 
@@ -42,18 +70,7 @@ export default function Form({
 			})}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max gap-4">
-				{Children.map(children, child => {
-					const element = child as ReactElement;
-					return element?.props?.name
-						? createElement(element.type, {
-								...{
-									...element.props,
-									register,
-									key: element.props.name
-								}
-						  })
-						: element;
-				})}
+				{addFormProps(children, register, control)}
 			</div>
 			<div>
 				{Object.entries(formState.errors).map(([name, error]) => {
