@@ -2,13 +2,11 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next";
 import { getCsrfToken } from "next-auth/react";
 
-/*
-NextAuth is a rather obnoxious library and importing unexported functions is
-somehow the best way to accomplish redirecting directly to a provider's
-OAuth login page from the server side.
-
-Credits to https://github.com/nextauthjs/next-auth/issues/45#issuecomment-1465009479
-*/
+// NextAuth is a rather obnoxious library and importing unexported functions is
+// somehow the best way to accomplish redirecting directly to a provider's
+// OAuth login page from the server side.
+//
+// See here: https://github.com/nextauthjs/next-auth/issues/45#issuecomment-1465009479
 
 //@ts-ignore
 import { init } from "../../node_modules/next-auth/core/init";
