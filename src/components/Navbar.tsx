@@ -33,7 +33,7 @@ function Skeleton({ children }: { children: ReactNode }) {
 		setColor(Math.random() < 0.5 ? "bg-gray-700" : "bg-gray-600");
 	}, []);
 	return status === "loading" ? (
-		<div className={classNames(color, "h-2")}>
+		<div className={classNames(color, "h-2 my-2")}>
 			<div className="h-0 overflow-hidden">{children}</div>
 		</div>
 	) : (
@@ -79,7 +79,7 @@ export default function Navbar() {
 					/>
 				</button>
 			</div>
-			<div className="my-2 md:flex items-center gap-4 text-lg">
+			<div className="my-2 flex flex-col md:flex-row items-start md:items-center md:gap-4 text-lg">
 				{status === "unauthenticated" ? (
 					<button
 						onClick={() =>
