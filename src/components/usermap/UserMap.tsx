@@ -25,7 +25,7 @@ export default function UserMap() {
 
 	return (
 		<>
-			<Page>
+			<Page pageTitle="User Map">
 				<FindStudentForm onFind={setUsers} />
 			</Page>
 			<MapContainer

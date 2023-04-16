@@ -40,7 +40,9 @@ function ProfileSection({ title, children }: ProfileSectionProps) {
 	return (
 		<div className="flex flex-col gap-2">
 			<h1 className="text-2xl font-bold">{title}</h1>
-			<div className="bg-gray-200 rounded-xl px-8 py-4 grow">{children}</div>
+			<div className="bg-gray-200 rounded-xl px-8 py-4 grow">
+				{children}
+			</div>
 		</div>
 	);
 }
@@ -59,11 +61,8 @@ function ProfileInfo({ title, children }: ProfileInfoProps) {
 export default function Profile({ data }: Props) {
 	const user: User = JSON.parse(data);
 	return (
-		<Page>
-			<PageSection
-				title={`${user.first_name} ${user.last_name} (${user.pronouns})`}
-				transparent={true}
-			>
+		<Page pageTitle={`${user.first_name} ${user.last_name} (${user.pronouns})`}>
+			<PageSection transparent={true}>
 				<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-8">
 					<ProfileSection title="General">
 						<ProfileInfo title="Address">

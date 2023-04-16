@@ -73,8 +73,8 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 		setLastCheckin(JSON.parse(lastCheckinData));
 	}, [lastCheckinData]);
 	return (
-		<Page>
-			<PageSection title={_class.class_dict!.name as string} padded={true}>
+		<Page pageTitle={_class.class_dict!.name as string}>
+			<PageSection padded={true}>
 				<CheckinForm
 					classId={_class.google_classroom_id!}
 					assignments={

@@ -86,8 +86,8 @@ function Class({ id, name, status, teacherName }: ParsedClass) {
 
 export default function ClassList({ classes }: Props) {
 	return (
-		<Page>
-			<PageSection title="Your Classes">
+		<Page pageTitle="Your Classes">
+			<PageSection>
 				{classes.map(c => (
 					<Class key={c.id} {...c} />
 				))}
