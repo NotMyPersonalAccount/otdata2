@@ -142,11 +142,11 @@ model Checkin {
 
 model Project {
   id                  String           @id @default(auto()) @map("_id") @db.ObjectId
-  name                String?
+  name                String
   student_id          String           @map("student") @db.ObjectId
-  student             User?            @relation(fields: [student_id], references: [id])
-  google_classroom_id String?          @map("gclass") @db.ObjectId
-  google_classroom    GoogleClassroom? @relation(fields: [google_classroom_id], references: [id])
+  student             User             @relation(fields: [student_id], references: [id])
+  google_classroom_id String           @map("gclass") @db.ObjectId
+  google_classroom    GoogleClassroom  @relation(fields: [google_classroom_id], references: [id])
   tasks               ProjectTask[]
   checkins            ProjectCheckin[]
   create_date         DateTime?        @default(now()) @map("createdate")
