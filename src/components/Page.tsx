@@ -8,7 +8,8 @@ type Props = HTMLProps<HTMLDivElement> & {
 	pageTitleProps?: HTMLProps<HTMLHeadingElement>;
 };
 type SectionProps = HTMLProps<HTMLDivElement> & {
-	children: React.ReactNode;
+	title?: string;
+	titleProps?: HTMLProps<HTMLHeadingElement>;
 	padded?: boolean;
 	transparent?: boolean;
 };
@@ -38,13 +39,29 @@ export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
 	);
 }
 
-export function PageSection({ padded, transparent, ...props }: SectionProps) {
+export function PageSection({
+	title,
+	titleProps,
+	padded,
+	transparent,
+	...props
+}: SectionProps) {
 	return (
-		<>
+		<div className="mx-1 sm:mx-2">
+			{title && (
+				<h2
+					{...titleProps}
+					className={classNames(
+						"text-2xl font-bold mb-2",
+						titleProps?.className
+					)}
+				>
+					{title}
+				</h2>
+			)}
 			<div
 				{...props}
 				className={classNames(
-					"mx-1 sm:mx-2",
 					{
 						"bg-gray-200 rounded-lg": !transparent,
 						"px-4 lg:px-12 py-8": padded
@@ -54,7 +71,7 @@ export function PageSection({ padded, transparent, ...props }: SectionProps) {
 			>
 				{props.children}
 			</div>
-		</>
+		</div>
 	);
 }
 
