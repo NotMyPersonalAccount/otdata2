@@ -111,7 +111,7 @@ export default function Navbar() {
 						</Skeleton>
 					</>
 				)}
-				<p>{time}</p>
+				<p className="w-16">{time}</p>
 			</div>
 		</div>
 	);
