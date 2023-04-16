@@ -9,9 +9,35 @@ import Link, { LinkProps } from "next/link";
 function NavbarLink(
 	props: LinkProps & {
 		children: ReactNode;
+		roles?: string[];
 	}
 ) {
-	return <Link className="block" {...props} />;
+	const { data: session, status } = useSession();
+	if (
+		status !== "loading" &&
+		props.roles &&
+		!props.roles.includes(session!.role)
+	)
+		return null;
+	return (
+		<Skeleton>
+			<Link className="block" {...props} />
+		</Skeleton>
+	);
+}
+
+function Skeleton({ children }: { children: ReactNode }) {
+	const { status } = useSession();
+	const [color] = useState(
+		Math.random() < 0.5 ? "bg-gray-700" : "bg-gray-600"
+	);
+	return status === "loading" ? (
+		<div className={classNames(color, "h-2")}>
+			<div className="h-0 overflow-hidden">{children}</div>
+		</div>
+	) : (
+		<>{children}</>
+	);
 }
 
 export default function Navbar() {
@@ -52,30 +78,36 @@ export default function Navbar() {
 					/>
 				</button>
 			</div>
-			<div className="my-2 md:flex gap-4 text-lg">
-				{status == "authenticated" ? (
-					<>
-						{session.role === "Teacher" && (
-							<NavbarLink href="/findstudent">Find</NavbarLink>
-						)}
-						{(session.role === "Student" ||
-							session.role === "Teacher") && (
-							<NavbarLink href="/checkin">Classes</NavbarLink>
-						)}
-						<NavbarLink href="/profile">{session.name}</NavbarLink>
-						<button onClick={() => signOut({ callbackUrl: "/" })}>
-							Logout
-						</button>
-					</>
+			<div className="my-2 md:flex items-center gap-4 text-lg">
+				{status === "unauthenticated" ? (
+					<button
+						onClick={() =>
+							signIn("google", { callbackUrl: "/profile" })
+						}
+					>
+						Login
+					</button>
 				) : (
 					<>
-						<button
-							onClick={() =>
-								signIn("google", { callbackUrl: "/profile" })
-							}
+						<NavbarLink href="/findstudent" roles={["Teacher"]}>
+							Find
+						</NavbarLink>
+						<NavbarLink
+							href="/checkin"
+							roles={["Student", "Teacher"]}
 						>
-							Login
-						</button>
+							Classes
+						</NavbarLink>
+						<NavbarLink href="/profile">
+							{session?.name ?? "Hello there, An!"}
+						</NavbarLink>
+						<Skeleton>
+							<button
+								onClick={() => signOut({ callbackUrl: "/" })}
+							>
+								Logout
+							</button>
+						</Skeleton>
 					</>
 				)}
 				<p>{time}</p>
