@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import Head from "next/head";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 type HTMLProps<T extends HTMLElement> = DetailedHTMLProps<HTMLAttributes<T>, T>;
@@ -15,6 +16,9 @@ type SectionProps = HTMLProps<HTMLDivElement> & {
 export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
 	return (
 		<>
+			<Head>
+				<title>{pageTitle} - OTData</title>
+			</Head>
 			<div
 				{...props}
 				className={classNames("p-4 sm:p-12 xl:px-36", props.className)}
