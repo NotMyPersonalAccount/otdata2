@@ -74,7 +74,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 	}, [lastCheckinData]);
 	return (
 		<Page pageTitle={_class.class_dict!.name as string}>
-			<PageSection title="Checkins" padded={true}>
+			<PageSection title="Checkins">
 				<CheckinForm
 					classId={_class.google_classroom_id!}
 					assignments={

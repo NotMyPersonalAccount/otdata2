@@ -11,7 +11,7 @@ export default function FindStudent() {
 	const [students, setStudents] = useState<User[]>([]);
 	return (
 		<Page pageTitle="Find Student">
-			<PageSection padded={true}>
+			<PageSection>
 				<FindStudentForm onFind={(data: User[]) => setStudents(data)} />
 				<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-6">
 					{students.map(student => {

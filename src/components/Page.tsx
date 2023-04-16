@@ -10,8 +10,7 @@ type Props = HTMLProps<HTMLDivElement> & {
 type SectionProps = HTMLProps<HTMLDivElement> & {
 	title?: string;
 	titleProps?: HTMLProps<HTMLHeadingElement>;
-	padded?: boolean;
-	transparent?: boolean;
+	padding?: "sm" | "lg" | "none";
 };
 
 export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
@@ -42,12 +41,11 @@ export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
 export function PageSection({
 	title,
 	titleProps,
-	padded,
-	transparent,
+	padding,
 	...props
 }: SectionProps) {
 	return (
-		<div className="mx-1 sm:mx-2">
+		<div className="mx-1 sm:mx-2 flex flex-col">
 			{title && (
 				<h2
 					{...titleProps}
@@ -62,9 +60,10 @@ export function PageSection({
 			<div
 				{...props}
 				className={classNames(
+					"bg-gray-200 rounded-lg grow",
 					{
-						"bg-gray-200 rounded-lg": !transparent,
-						"px-4 lg:px-12 py-8": padded
+						"px-4 lg:px-12 py-8": padding === "lg" || !padding,
+						"px-4 sm:px-8 py-4": padding === "sm"
 					},
 					props?.className
 				)}
