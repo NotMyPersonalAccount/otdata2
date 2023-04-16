@@ -28,9 +28,10 @@ function NavbarLink(
 
 function Skeleton({ children }: { children: ReactNode }) {
 	const { status } = useSession();
-	const [color] = useState(
-		Math.random() < 0.5 ? "bg-gray-700" : "bg-gray-600"
-	);
+	const [color, setColor] = useState("");
+	useEffect(() => {
+		setColor(Math.random() < 0.5 ? "bg-gray-700" : "bg-gray-600");
+	}, []);
 	return status === "loading" ? (
 		<div className={classNames(color, "h-2")}>
 			<div className="h-0 overflow-hidden">{children}</div>
