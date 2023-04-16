@@ -68,6 +68,7 @@ model User {
   enrollment        GEnrollment[]
   checkins_owned    Checkin[]         @relation(name: "checkins_owned")
   checkins_created  Checkin[]         @relation(name: "checkins_created")
+  projects           Project[]
 
   @@map("user")
 }
@@ -89,6 +90,7 @@ model GoogleClassroom {
   periods                  Int[]         @map("pers")
   enrollment               GEnrollment[]
   checkins                 Checkin[]
+  projects                 Project[]
 
   @@map("google_classroom")
 }
@@ -136,4 +138,37 @@ model Checkin {
   camera_off_reason_other String?  @map("cameraoffreasonother")
 
   @@map("check_in")
+}
+
+model Project {
+  id                  String           @id @default(auto()) @map("_id") @db.ObjectId
+  name                String?
+  student_id          String           @map("student") @db.ObjectId
+  student             User?            @relation(fields: [student_id], references: [id])
+  google_classroom_id String?          @map("gclass") @db.ObjectId
+  google_classroom    GoogleClassroom? @relation(fields: [google_classroom_id], references: [id])
+  tasks               ProjectTask[]
+  checkins            ProjectCheckin[]
+  create_date         DateTime?        @default(now()) @map("createdate")
+
+  @@map("project")
+}
+
+type ProjectTask {
+  id            String    @map("_id") @db.ObjectId
+  order         Int
+  name          String
+  description   String    @map("desc")
+  status        String    @default("New")
+  create_date   DateTime  @default(now()) @map("createdate")
+  complete_date DateTime? @map("completedate")
+}
+
+type ProjectCheckin {
+  id              String      @map("_id") @db.ObjectId
+  working_on      ProjectTask
+  working_on_name String      @map("workingonname")
+  status          String
+  description     String      @map("desc")
+  create_date     DateTime    @default(now()) @map("createdate")
 }
