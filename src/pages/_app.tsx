@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { SessionProvider } from "next-auth/react";
