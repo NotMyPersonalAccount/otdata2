@@ -12,7 +12,7 @@ type Props = { loading?: boolean } & DetailedHTMLProps<
 	HTMLButtonElement
 >;
 
-export default function Button({
+export function Button({
 	className,
 	loading: initiallyLoading,
 	...props
@@ -23,10 +23,7 @@ export default function Button({
 	return (
 		<button
 			{...props}
-			className={classNames(
-				className,
-				"px-4 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
-			)}
+			className={classNames(className)}
 			disabled={props.disabled || loading}
 			onClick={async event => {
 				if (!loading && props.onClick) {
@@ -41,6 +38,18 @@ export default function Button({
 				{props.children}
 			</div>
 		</button>
+	);
+}
+
+export function PillButton({ className, ...props }: Props) {
+	return (
+		<Button
+			className={classNames(
+				className,
+				"px-4 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
+			)}
+			{...props}
+		></Button>
 	);
 }
 

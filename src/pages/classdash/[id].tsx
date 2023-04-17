@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import { PillButton } from "@/components/Button";
 import CheckinForm from "@/components/forms/CheckinForm";
 import { trpc } from "@/lib/api/trpc";
 import prisma from "@/lib/database/prisma";
@@ -101,7 +101,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 						<CheckinValue label="What you said you would do">
 							{lastCheckin.working_on}
 						</CheckinValue>
-						<Button
+						<PillButton
 							className="mt-4 bg-red-400 hover:bg-red-500"
 							onClick={async () => {
 								const newLastCheckin =
@@ -113,7 +113,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 							}}
 						>
 							Delete Last Checkin
-						</Button>
+						</PillButton>
 					</div>
 				)}
 			</PageSection>

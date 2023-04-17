@@ -13,7 +13,7 @@ import {
 	useForm,
 	UseFormRegister
 } from "react-hook-form";
-import Button from "../Button";
+import { PillButton } from "../Button";
 
 type Props = Omit<HTMLProps<HTMLFormElement>, "onSubmit"> & {
 	submitLabel?: string;
@@ -81,9 +81,9 @@ export default function Form({
 					) : undefined;
 				})}
 			</div>
-			<Button loading={formState.isSubmitting}>
+			<PillButton loading={formState.isSubmitting}>
 				{submitLabel ?? "Submit"}
-			</Button>
+			</PillButton>
 		</form>
 	);
 }
