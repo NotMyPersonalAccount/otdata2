@@ -8,7 +8,7 @@ import { Page, PageSection } from "@/components/Page";
 import { Button, PillButton } from "@/components/Button";
 import { MdAssignmentAdd, MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CreateProjectModal from "@/components/modals/CreateProject";
 
 type Props = {
@@ -134,10 +134,12 @@ export default function Projects({
 	projects: encodedProjects,
 	classes: encodedClasses
 }: Props) {
-	const [projects, setProjects] = useState<Project[]>(
-		JSON.parse(encodedProjects)
-	);
+	const [projects, setProjects] = useState<Project[]>([]);
 	const classes = useMemo(() => JSON.parse(encodedClasses), [encodedClasses]);
+
+	useEffect(() => {
+		setProjects(JSON.parse(encodedProjects));
+	}, [encodedProjects]);
 
 	return (
 		<Page
