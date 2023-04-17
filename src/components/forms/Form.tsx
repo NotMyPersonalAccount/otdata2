@@ -81,7 +81,7 @@ export default function Form({
 					) : undefined;
 				})}
 			</div>
-			<PillButton loading={formState.isSubmitting}>
+			<PillButton variant="suggestive" loading={formState.isSubmitting}>
 				{submitLabel ?? "Submit"}
 			</PillButton>
 		</form>

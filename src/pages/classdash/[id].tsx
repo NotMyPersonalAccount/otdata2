@@ -103,7 +103,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 						</CheckinValue>
 						<PillButton
 							className="mt-4"
-							buttonColor="bg-red-400"
+							variant="destructive"
 							onClick={async () => {
 								const newLastCheckin =
 									await trpc.checkin.delete.mutate({
