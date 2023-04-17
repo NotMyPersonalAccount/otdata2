@@ -23,7 +23,7 @@ export function Page({
 	return (
 		<>
 			<Head>
-				<title>{pageTitle} - OTData</title>
+				<title>{`${pageTitle} - OTData`}</title>
 			</Head>
 			<div
 				{...props}
