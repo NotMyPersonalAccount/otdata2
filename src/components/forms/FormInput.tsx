@@ -1,18 +1,29 @@
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { FieldValues, RegisterOptions, UseFormRegister } from "react-hook-form";
 
-type Props = {
+type Props = DetailedHTMLProps<
+	InputHTMLAttributes<HTMLInputElement>,
+	HTMLInputElement
+> & {
 	register?: UseFormRegister<FieldValues>;
 	name: string;
 	label: string;
 	options?: RegisterOptions;
 };
 
-export default function FormInput({ register, name, label, options }: Props) {
+export default function FormInput({
+	register,
+	name,
+	label,
+	options,
+	...props
+}: Props) {
 	return (
 		<div className="flex flex-col gap-2 w-full justify-between">
 			<label className="text-lg font-semibold">{label}</label>
 			<input
 				className="outline outline-1 outline-black hover:outline-2 hover:outline-blue-500 focus:outline-2 focus:outline-blue-500 px-2 py-2 rounded-md"
+				{...props}
 				{...register!(name, options)}
 			/>
 		</div>
