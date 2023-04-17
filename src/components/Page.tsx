@@ -11,6 +11,7 @@ type Props = HTMLProps<HTMLDivElement> & {
 type SectionProps = HTMLProps<HTMLDivElement> & {
 	title?: string;
 	titleProps?: HTMLProps<HTMLHeadingElement>;
+	titleSuffix?: ReactNode;
 	padding?: "sm" | "lg" | "none";
 };
 
@@ -50,21 +51,25 @@ export function Page({
 export function PageSection({
 	title,
 	titleProps,
+	titleSuffix,
 	padding,
 	...props
 }: SectionProps) {
 	return (
 		<div className="mx-1 sm:mx-2 flex flex-col">
 			{title && (
-				<h2
-					{...titleProps}
-					className={classNames(
-						"text-2xl font-bold mb-2",
-						titleProps?.className
-					)}
-				>
-					{title}
-				</h2>
+				<div className="flex flex-wrap gap-2 mb-2">
+					<h2
+						{...titleProps}
+						className={classNames(
+							"text-2xl font-bold",
+							titleProps?.className
+						)}
+					>
+						{title}
+					</h2>
+					{titleSuffix}
+				</div>
 			)}
 			<div
 				{...props}
