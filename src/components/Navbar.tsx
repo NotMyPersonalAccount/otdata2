@@ -90,6 +90,9 @@ export default function Navbar() {
 					</button>
 				) : (
 					<>
+						<NavbarLink href="/myprojects" roles={["Student"]}>
+							Projects
+						</NavbarLink>
 						<NavbarLink href="/findstudent" roles={["Teacher"]}>
 							Find
 						</NavbarLink>
