@@ -22,6 +22,7 @@
 		"leaflet": "^1.9.3",
 		"next": "13.3.0",
 		"next-auth": "^4.22.0",
+		"nprogress": "^0.2.0",
 		"prisma": "^4.12.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
@@ -35,6 +36,7 @@
 	"devDependencies": {
 		"@types/leaflet": "^1.9.3",
 		"@types/node": "18.15.11",
+		"@types/nprogress": "^0.2.0",
 		"@types/react": "18.0.34",
 		"@types/react-dom": "18.0.11",
 		"@types/react-modal": "^3.13.1",

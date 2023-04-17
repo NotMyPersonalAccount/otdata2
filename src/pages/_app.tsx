@@ -7,12 +7,14 @@ import type { AppProps } from "next/app";
 import { Analytics } from "@vercel/analytics/react";
 import ImpersonationModal from "@/components/modals/Impersonation";
 import ImpersonationBanner from "@/components/ImpersonationBanner";
+import LoadingBar from "@/components/LoadingBar";
 
 dayjs.extend(relativeTime);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 	return (
 		<SessionProvider session={session}>
+			<LoadingBar/>
 			<Navbar />
 			<ImpersonationBanner />
 			<ImpersonationModal />

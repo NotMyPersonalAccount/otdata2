@@ -9,6 +9,7 @@ specifiers:
   '@trpc/server': ^10.19.1
   '@types/leaflet': ^1.9.3
   '@types/node': 18.15.11
+  '@types/nprogress': ^0.2.0
   '@types/react': 18.0.34
   '@types/react-dom': 18.0.11
   '@types/react-modal': ^3.13.1
@@ -22,6 +23,7 @@ specifiers:
   leaflet: ^1.9.3
   next: 13.3.0
   next-auth: ^4.22.0
+  nprogress: ^0.2.0
   postcss: ^8.4.21
   prettier: ^2.8.7
   prisma: ^4.12.0
@@ -50,6 +52,7 @@ dependencies:
   leaflet: 1.9.3
   next: 13.3.0_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.22.0_yucv4tfv7v7nrkw2uguegj6e7e
+  nprogress: 0.2.0
   prisma: 4.12.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -63,6 +66,7 @@ dependencies:
 devDependencies:
   '@types/leaflet': 1.9.3
   '@types/node': 18.15.11
+  '@types/nprogress': 0.2.0
   '@types/react': 18.0.34
   '@types/react-dom': 18.0.11
   '@types/react-modal': 3.13.1
@@ -399,6 +403,10 @@ packages:
 
   /@types/node/18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
+    dev: true
+
+  /@types/nprogress/0.2.0:
+    resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
     dev: true
 
   /@types/prop-types/15.7.5:
@@ -1990,6 +1998,10 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
+    dev: false
 
   /oauth/0.9.15:
     resolution: {integrity: sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==}
