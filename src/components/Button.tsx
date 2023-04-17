@@ -12,6 +12,10 @@ type Props = { loading?: boolean } & DetailedHTMLProps<
 	HTMLButtonElement
 >;
 
+type PillProps = Props & {
+	buttonColor?: string;
+};
+
 export function Button({
 	className,
 	loading: initiallyLoading,
@@ -41,12 +45,13 @@ export function Button({
 	);
 }
 
-export function PillButton({ className, ...props }: Props) {
+export function PillButton({ className, buttonColor, ...props }: PillProps) {
 	return (
 		<Button
 			className={classNames(
 				className,
-				"px-4 py-2 self-start h-10 bg-blue-300 hover:bg-blue-400 rounded-lg"
+				"px-4 py-2 self-start h-10 bg-opacity-80 hover:bg-opacity-100 rounded-lg",
+				buttonColor ?? "bg-blue-400"
 			)}
 			{...props}
 		></Button>
