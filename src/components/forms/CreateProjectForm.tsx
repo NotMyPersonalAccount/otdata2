@@ -10,9 +10,11 @@ type Props = {
 	classes: Prisma.GEnrollmentGetPayload<{
 		include: { google_classroom: true };
 	}>[];
-	onCreate?: (project: Prisma.ProjectGetPayload<{
-		include: { google_classroom: true };
-	}>) => void;
+	onCreate?: (
+		project: Prisma.ProjectGetPayload<{
+			include: { google_classroom: true };
+		}>
+	) => void;
 };
 
 export default function CreateProjectForm({ classes, onCreate }: Props) {
@@ -42,7 +44,11 @@ export default function CreateProjectForm({ classes, onCreate }: Props) {
 					);
 				})}
 			</FormSelect>
-			<FormInput name="name" label="Name" />
+			<FormInput
+				name="name"
+				label="Name"
+				options={{ required: "Fill in name" }}
+			/>
 		</Form>
 	);
 }
