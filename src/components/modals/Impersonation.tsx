@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
+import Modal from "./Modal";
 import FindStudentForm from "../forms/FindStudentForm";
 import { User } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -24,7 +24,11 @@ export default function ImpersonationModal() {
 	}, [session]);
 
 	return (
-		<Modal isOpen={open} onRequestClose={() => setOpen(false)}>
+		<Modal
+			isOpen={open}
+			onRequestClose={() => setOpen(false)}
+			title="Impersonate User"
+		>
 			<FindStudentForm onFind={setUsers} />
 			<div className="mt-8 text-lg">
 				{users.map(user => (
