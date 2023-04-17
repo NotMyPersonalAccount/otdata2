@@ -1,11 +1,12 @@
 import classNames from "classnames";
 import Head from "next/head";
-import { DetailedHTMLProps, HTMLAttributes } from "react";
+import { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 
 type HTMLProps<T extends HTMLElement> = DetailedHTMLProps<HTMLAttributes<T>, T>;
 type Props = HTMLProps<HTMLDivElement> & {
 	pageTitle: string;
 	pageTitleProps?: HTMLProps<HTMLHeadingElement>;
+	pageTitleSuffix?: ReactNode;
 };
 type SectionProps = HTMLProps<HTMLDivElement> & {
 	title?: string;
@@ -13,7 +14,12 @@ type SectionProps = HTMLProps<HTMLDivElement> & {
 	padding?: "sm" | "lg" | "none";
 };
 
-export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
+export function Page({
+	pageTitle,
+	pageTitleProps,
+	pageTitleSuffix,
+	...props
+}: Props) {
 	return (
 		<>
 			<Head>
@@ -23,15 +29,18 @@ export function Page({ pageTitle, pageTitleProps, ...props }: Props) {
 				{...props}
 				className={classNames("p-4 sm:p-12 xl:px-36", props.className)}
 			>
-				<h1
-					{...pageTitleProps}
-					className={classNames(
-						"text-4xl font-bold mb-4",
-						pageTitleProps?.className
-					)}
-				>
-					{pageTitle}
-				</h1>
+				<div className="flex flex-wrap gap-2 md:gap-4 mb-4">
+					<h1
+						{...pageTitleProps}
+						className={classNames(
+							"text-4xl font-bold",
+							pageTitleProps?.className
+						)}
+					>
+						{pageTitle}
+					</h1>
+					{pageTitleSuffix}
+				</div>
 				{props.children}
 			</div>
 		</>
