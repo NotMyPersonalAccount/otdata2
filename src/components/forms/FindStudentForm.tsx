@@ -36,7 +36,7 @@ export default function FindStudentForm({ onFind }: Props) {
 	return (
 		<Form
 			onSubmit={async (data: FindUserInput) => {
-				onFind?.((await trpc.user.find.query(data)) as User[]);
+				onFind?.(await trpc.user.find.query(data));
 			}}
 			submitLabel="Search"
 		>

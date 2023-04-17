@@ -23,7 +23,7 @@ export default function CheckinForm({ classId, assignments, onCreate }: Props) {
 						classId,
 						userId: session.currUserId
 					});
-					if (onCreate) onCreate(checkin as Checkin);
+					onCreate?.(checkin);
 				}
 			}}
 		>

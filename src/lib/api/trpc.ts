@@ -1,5 +1,6 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import { AppRouter } from "./routers/_app";
+import SuperJSON from "superjson";
 
 const getBaseUrl = () => {
 	if (typeof window !== "undefined") return "";
@@ -12,6 +13,7 @@ export const trpc = createTRPCProxyClient<AppRouter>({
 		httpBatchLink({
 			url: `${getBaseUrl()}/api/trpc`
 		})
-	]
+	],
+	transformer: SuperJSON
 });
 
