@@ -5,6 +5,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Link, { LinkProps } from "next/link";
+import { useRouter } from "next/router";
 
 function NavbarLink(
 	props: LinkProps & {
@@ -13,6 +14,7 @@ function NavbarLink(
 	}
 ) {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 	if (
 		status !== "loading" &&
 		props.roles &&
@@ -21,7 +23,13 @@ function NavbarLink(
 		return null;
 	return (
 		<Skeleton>
-			<Link className="block" {...props} />
+			<Link
+				className="block"
+				{...props}
+				onClick={e =>
+					router.pathname === props.href && e.preventDefault()
+				}
+			/>
 		</Skeleton>
 	);
 }
