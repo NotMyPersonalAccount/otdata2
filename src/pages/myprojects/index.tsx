@@ -44,8 +44,14 @@ export const getServerSideProps = enforceAuthentication(async context => {
 			where: {
 				student_id: session!.currUserId
 			},
-			include: {
-				google_classroom: true
+			select: {
+				id: true,
+				name: true,
+				google_classroom: {
+					select: {
+						class_dict: true
+					}
+				}
 			}
 		}),
 		await prisma.gEnrollment.findMany({
@@ -53,8 +59,14 @@ export const getServerSideProps = enforceAuthentication(async context => {
 				owner_id: session!.currUserId,
 				status: "Active"
 			},
-			include: {
-				google_classroom: true
+			select: {
+				google_classroom: {
+					select: {
+						id: true,
+						google_classroom_id: true,
+						class_dict: true
+					}
+				}
 			}
 		})
 	]);
