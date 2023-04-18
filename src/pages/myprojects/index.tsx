@@ -94,7 +94,7 @@ function Project({ id, name, google_classroom, onDelete }: ProjectProps) {
 					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">
-					<div className="flex gap-2 text-xl">
+					<div className="flex gap-2">
 						<Button
 							onClick={async () => {
 								await trpc.project.delete.mutate({
@@ -103,7 +103,7 @@ function Project({ id, name, google_classroom, onDelete }: ProjectProps) {
 								onDelete?.();
 							}}
 						>
-							<MdDeleteOutline />
+							<MdDeleteOutline size={20} />
 						</Button>
 					</div>
 				</div>
@@ -124,7 +124,7 @@ function CreateProjectButton({ classes, onCreate }: CreateProjectButtonProps) {
 				setOpen={setOpen}
 			/>
 			<PillButton className="text-lg" onClick={() => setOpen(true)}>
-				<MdAssignmentAdd />
+				<MdAssignmentAdd size={20} />
 			</PillButton>
 		</>
 	);

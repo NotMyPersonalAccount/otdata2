@@ -29,3 +29,18 @@
 	// Move modal below screen for opening transition
 	@apply translate-y-full sm:translate-y-[200%];
 }
+
+table {
+	@apply text-left w-full;
+}
+
+th {
+	@apply text-lg;
+}
+
+td,
+th {
+	@apply p-2;
+	@apply border-b-2 border-gray-300;
+}
+
