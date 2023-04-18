@@ -113,10 +113,45 @@ export const projectRouter = router({
 			});
 			if (!project) throw new Error("Project not found");
 
-			const tasks: Partial<ProjectTask>[] = project.tasks;
-			const newTaskIndex = Math.min(0, Math.max(tasks.length, order));
+			const tasks = project.tasks;
+			const task =
+				tasks.find(t => t.id === id) ??
+				tasks[
+					(tasks as Partial<ProjectTask>[]).push({
+						id: new ObjectId().toString(),
+						order: tasks.length + 1,
+						name,
+						description,
+						status
+					}) - 1
+				];
 
-			// TODO
+			const newOrder = Math.max(1, Math.min(tasks.length, order));
+			if (task.order !== newOrder) {
+				tasks.forEach(t => {
+					if (t.id === task.id) return;
+
+					if (t.order >= newOrder && t.order < task.order) t.order++;
+					else if (t.order < newOrder && t.order > task.order)
+						t.order--;
+				});
+				task.order = newOrder;
+			}
+
+			tasks
+				.sort((a, b) => a.order - b.order)
+				.forEach((t, i) => (t.order = i + 1));
+
+			return await prisma.project.update({
+				where: {
+					id: projectId
+				},
+				data: {
+					tasks: {
+						set: tasks
+					}
+				}
+			});
 		}),
 	deleteTask: procedure
 		.input(deleteTaskSchema)
@@ -208,6 +243,13 @@ export const projectRouter = router({
 			const { id, projectId } = input;
 
 			if (!ctx.session) throw new Error("Not logged in");
+
+			const project = await prisma.project.findUnique({
+				where: {
+					id: projectId
+				}
+			});
+			if (!project) throw new Error("Project not found");
 
 			await prisma.project.update({
 				where: {
