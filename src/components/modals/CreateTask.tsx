@@ -21,7 +21,13 @@ export default function CreateTaskModal({
 			onRequestClose={() => setOpen(false)}
 			title="Create Task"
 		>
-			<CreateTaskForm project={project} onCreate={onCreate} />
+			<CreateTaskForm
+				project={project}
+				onCreate={project => {
+					onCreate?.(project);
+					setOpen(false);
+				}}
+			/>
 		</Modal>
 	);
 }
