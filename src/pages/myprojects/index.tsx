@@ -40,7 +40,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		authOptions
 	);
 	const [projects, classes] = await Promise.all([
-		await prisma.project.findMany({
+		prisma.project.findMany({
 			where: {
 				student_id: session!.currUserId
 			},
@@ -54,7 +54,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 				}
 			}
 		}),
-		await prisma.gEnrollment.findMany({
+		prisma.gEnrollment.findMany({
 			where: {
 				owner_id: session!.currUserId,
 				status: "Active"
