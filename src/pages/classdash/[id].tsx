@@ -90,7 +90,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 							Last Checkin
 						</p>
 						<CheckinValue label="Date">
-							{dayjs(lastCheckin.create_date).fromNow()}
+							{dayjs(lastCheckin.create_date).calendar()}
 						</CheckinValue>
 						<CheckinValue label="Were you productive?">
 							{lastCheckin.status}
