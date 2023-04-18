@@ -1,16 +1,18 @@
-import { Project } from "@prisma/client";
+import { Project, ProjectTask } from "@prisma/client";
 import Modal from "./Modal";
-import CreateTaskForm from "../forms/CreateTaskForm";
+import CreateOrEditTaskForm from "../forms/CreateOrEditTaskForm";
 
 type Props = {
 	project: Project;
+	task?: ProjectTask;
 	onCreate?: (project: Project) => void;
 	open: boolean;
 	setOpen: (open: boolean) => void;
 };
 
-export default function CreateTaskModal({
+export default function CreateOrEditTaskModal({
 	project,
+	task,
 	onCreate,
 	open,
 	setOpen
@@ -19,10 +21,11 @@ export default function CreateTaskModal({
 		<Modal
 			isOpen={open}
 			onRequestClose={() => setOpen(false)}
-			title="Create Task"
+			title={task ? "Edit Task" : "Create Task"}
 		>
-			<CreateTaskForm
+			<CreateOrEditTaskForm
 				project={project}
+				task={task}
 				onCreate={project => {
 					onCreate?.(project);
 					setOpen(false);

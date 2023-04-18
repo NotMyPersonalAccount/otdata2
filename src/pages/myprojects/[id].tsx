@@ -10,8 +10,9 @@ import {
 	MdModeEditOutline
 } from "react-icons/md";
 import { useState } from "react";
-import CreateTaskModal from "@/components/modals/CreateTask";
+import CreateTaskModal from "@/components/modals/CreateOrEditTask";
 import { trpc } from "@/lib/api/trpc";
+import CreateOrEditTaskModal from "@/components/modals/CreateOrEditTask";
 
 type Props = {
 	data: string;
@@ -65,6 +66,13 @@ function TaskRow({ project, task, onEdit }: TaskRowProps) {
 		<tr>
 			<td>
 				<div className="flex flex-wrap gap-1">
+					<CreateOrEditTaskModal
+						project={project}
+						task={task}
+						onCreate={onEdit}
+						open={editOpen}
+						setOpen={setEditOpen}
+					/>
 					<Button onClick={() => setEditOpen(true)}>
 						<MdModeEditOutline size={20} />
 					</Button>
