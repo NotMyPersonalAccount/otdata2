@@ -167,8 +167,14 @@ export const projectRouter = router({
 			});
 			if (!project) throw new Error("Project not found");
 
-			const task = project.tasks.find(task => task.id === id);
-			if (!task) throw new Error("Task not found");
+			const tasks = project.tasks;
+			const taskIndex = tasks.findIndex(task => task.id === id);
+			if (taskIndex === -1) throw new Error("Task not found");
+
+			tasks.splice(taskIndex, 1);
+			tasks
+				.sort((a, b) => a.order - b.order)
+				.forEach((t, i) => (t.order = i + 1));
 
 			return await prisma.project.update({
 				where: {
@@ -176,11 +182,7 @@ export const projectRouter = router({
 				},
 				data: {
 					tasks: {
-						deleteMany: {
-							where: {
-								id
-							}
-						}
+						set: tasks
 					}
 				}
 			});
