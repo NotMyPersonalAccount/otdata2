@@ -28,9 +28,9 @@ export function Page({
 			</Head>
 			<div
 				{...props}
-				className={classNames("p-4 sm:p-12 xl:px-36", props.className)}
+				className={classNames("p-4 sm:p-12 xl:px-36 flex flex-col gap-6", props.className)}
 			>
-				<div className="flex flex-wrap gap-2 md:gap-4 mb-4">
+				<div className="flex flex-wrap gap-2 md:gap-4">
 					<h1
 						{...pageTitleProps}
 						className={classNames(
