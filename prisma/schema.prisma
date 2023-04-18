@@ -166,7 +166,7 @@ type ProjectTask {
 
 type ProjectCheckin {
   id              String   @map("_id") @db.ObjectId
-  working_on_id   String   @map("workingon") @db.ObjectId
+  working_on_id   String   @map("ProjectTask") @db.ObjectId
   working_on_name String   @map("workingonname")
   status          String
   description     String   @map("desc")
