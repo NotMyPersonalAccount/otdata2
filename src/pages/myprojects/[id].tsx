@@ -1,7 +1,7 @@
 import { enforceAuthentication } from "@/utils/enforcement";
 import prisma from "@/lib/database/prisma";
 import { sendError } from "@/utils/error_handling";
-import { Project, ProjectTask } from "@prisma/client";
+import { Project, ProjectCheckin, ProjectTask } from "@prisma/client";
 import { Page, PageSection } from "@/components/Page";
 import { Button, PillButton } from "@/components/Button";
 import {
@@ -13,6 +13,7 @@ import { useState } from "react";
 import CreateTaskModal from "@/components/modals/CreateOrEditTask";
 import { trpc } from "@/lib/api/trpc";
 import CreateOrEditTaskModal from "@/components/modals/CreateOrEditTask";
+import dayjs from "dayjs";
 
 type Props = {
 	data: string;
@@ -27,6 +28,12 @@ type TaskRowProps = {
 	project: Project;
 	task: ProjectTask;
 	onEdit?: (project: Project) => void;
+};
+
+type CheckinRowProps = {
+	project: Project;
+	checkin: ProjectCheckin;
+	onDelete?: (project: Project) => void;
 };
 
 export const getServerSideProps = enforceAuthentication(async context => {
@@ -99,6 +106,32 @@ function TaskRow({ project, task, onEdit }: TaskRowProps) {
 	);
 }
 
+function CheckinRow({ project, checkin, onDelete }: CheckinRowProps) {
+	return (
+		<tr>
+			<td>
+				<Button
+					onClick={async () => {
+						const result = await trpc.project.deleteCheckin.mutate({
+							id: checkin.id,
+							projectId: project.id
+						});
+						onDelete?.(result);
+					}}
+				>
+					<MdDeleteOutline size={20} />
+				</Button>
+			</td>
+			<td>{dayjs(checkin.create_date).calendar()}</td>
+			<td>
+				{project.tasks.find(t => t.id === checkin.working_on_id)!.name}
+			</td>
+			<td>{checkin.status}</td>
+			<td>{checkin.description}</td>
+		</tr>
+	);
+}
+
 export default function Project({ data }: Props) {
 	const [project, setProject] = useState<Project>(JSON.parse(data));
 	return (
@@ -127,6 +160,31 @@ export default function Project({ data }: Props) {
 									project={project}
 									task={task}
 									onEdit={setProject}
+								/>
+							);
+						})}
+					</tbody>
+				</table>
+			</PageSection>
+			<PageSection title="Checkins" className="overflow-x-auto">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Date</th>
+							<th>Task</th>
+							<th>Status</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{project.checkins.map(checkin => {
+							return (
+								<CheckinRow
+									key={checkin.id}
+									project={project}
+									checkin={checkin}
+									onDelete={setProject}
 								/>
 							);
 						})}
