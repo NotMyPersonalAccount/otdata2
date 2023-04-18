@@ -170,7 +170,7 @@ export const projectRouter = router({
 			const task = project.tasks.find(task => task.id === id);
 			if (!task) throw new Error("Task not found");
 
-			await prisma.project.update({
+			return await prisma.project.update({
 				where: {
 					id: projectId
 				},
@@ -251,7 +251,7 @@ export const projectRouter = router({
 			});
 			if (!project) throw new Error("Project not found");
 
-			await prisma.project.update({
+			return await prisma.project.update({
 				where: {
 					id: projectId
 				},
@@ -263,7 +263,6 @@ export const projectRouter = router({
 					}
 				}
 			});
-			return true;
 		})
 });
 
