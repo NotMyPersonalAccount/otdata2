@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.modal {
+	// Hide elements behind modal
+	@apply bg-white;
+	// Add padding
+	@apply px-8 py-8;
+	// Add shadow & rounded Corners
+	// Remove default focus outline
+	@apply outline-none shadow-md rounded-lg;
+	// Add borders; show borders only on top for mobile
+	@apply border-t-2 sm:border-2 border-slate-200;
+	// Position modal at bottom for mobile
+	@apply bottom-0 sm:bottom-auto;
+	// Center the modal on non-mobile
+	@apply fixed sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 right-auto;
+	// Transition modal into view
+	@apply transition-transform duration-200 ease-in-out;
+	// Set width and height; modal takes full width on mobile
+	@apply w-full sm:w-3/4 max-h-[80%];
+	// Enable scrolling
+	@apply overflow-y-auto;
+}
+
+.modal:not(.modal-open),
+.modal-close {
+	// Move modal below screen for opening transition
+	@apply translate-y-full sm:translate-y-[200%];
+}
