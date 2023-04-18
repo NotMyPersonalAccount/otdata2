@@ -16,13 +16,13 @@ export default function CreateTaskForm({ project, onCreate }: Props) {
 	return (
 		<Form
 			onSubmit={async (data: CreateOrEditTaskInput) => {
-				if (session)
-					onCreate?.(
-						await trpc.project.createOrEditTask.mutate({
-							...data,
-							projectId: project.id
-						})
-					);
+				if (session) {
+					const result = await trpc.project.createOrEditTask.mutate({
+						...data,
+						projectId: project.id
+					});
+					onCreate?.(result);
+				}
 			}}
 		>
 			<FormInput

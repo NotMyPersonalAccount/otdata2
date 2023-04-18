@@ -22,7 +22,10 @@ export default function CreateProjectForm({ classes, onCreate }: Props) {
 	return (
 		<Form
 			onSubmit={async (data: CreateProjectInput) => {
-				if (session) onCreate?.(await trpc.project.create.mutate(data));
+				if (session) {
+					const project = await trpc.project.create.mutate(data);
+					onCreate?.(project);
+				}
 			}}
 		>
 			<FormSelect name="classId" label="Class">
