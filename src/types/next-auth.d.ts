@@ -1,9 +1,10 @@
+import { Role } from "@/lib/enums/role";
 import NextAuth from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
 
 type ExtraSessionInfo = {
 	admin: boolean;
-	role: string;
+	role: Role;
 	currUserId: string;
 	aeriesId: number;
 	name: string;

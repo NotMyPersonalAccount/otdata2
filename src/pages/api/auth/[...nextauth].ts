@@ -1,4 +1,5 @@
 import prisma from "@/lib/database/prisma";
+import { Role } from "@/lib/enums/role";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 
@@ -26,9 +27,9 @@ export const authOptions: AuthOptions = {
 						google_id: user.id,
 						role: email.endsWith("@ousd.org")
 							? email.startsWith("s_")
-								? "Student"
-								: "Teacher"
-							: "Community",
+								? Role.Student
+								: Role.Teacher
+							: Role.Community,
 						aeries_first_name: googleProfile.given_name,
 						aeries_last_name: googleProfile.family_name,
 						first_name: googleProfile.given_name,
@@ -39,7 +40,7 @@ export const authOptions: AuthOptions = {
 			if (!token.otdata || !dbUser.is_admin) {
 				token.otdata = {
 					admin: dbUser.is_admin!,
-					role: dbUser.role!,
+					role: dbUser.role! as Role,
 					currUserId: dbUser.id,
 					aeriesId: dbUser.aeries_id!,
 					name: `${dbUser.first_name} ${dbUser.last_name}`

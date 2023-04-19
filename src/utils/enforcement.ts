@@ -2,6 +2,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { forceLogin, sendError } from "./error_handling";
+import { Role } from "@/lib/enums/role";
 
 export function enforceTeacher<T>(
 	innerFn?: GetServerSideProps
@@ -12,7 +13,7 @@ export function enforceTeacher<T>(
 			context.res,
 			authOptions
 		);
-		if (session!.role !== "Teacher")
+		if (session!.role !== Role.Teacher)
 			return sendError("You are not a teacher");
 			return innerFn ? innerFn(context) : { props: {} };
 		});

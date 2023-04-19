@@ -6,11 +6,12 @@ import { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
+import { Role } from "@/lib/enums/role";
 
 function NavbarLink(
 	props: LinkProps & {
 		children: ReactNode;
-		roles?: string[];
+		roles?: Role[];
 	}
 ) {
 	const { data: session, status } = useSession();
@@ -98,15 +99,15 @@ export default function Navbar() {
 					</button>
 				) : (
 					<>
-						<NavbarLink href="/myprojects" roles={["Student"]}>
+						<NavbarLink href="/myprojects" roles={[Role.Student]}>
 							Projects
 						</NavbarLink>
-						<NavbarLink href="/findstudent" roles={["Teacher"]}>
+						<NavbarLink href="/findstudent" roles={[Role.Teacher]}>
 							Find
 						</NavbarLink>
 						<NavbarLink
 							href="/checkin"
-							roles={["Student", "Teacher"]}
+							roles={[Role.Student, Role.Teacher]}
 						>
 							Classes
 						</NavbarLink>
