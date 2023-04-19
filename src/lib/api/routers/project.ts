@@ -114,27 +114,32 @@ export const projectRouter = router({
 			if (!project) throw new Error("Project not found");
 
 			const tasks = project.tasks;
-			let taskIndex = tasks.findIndex(t => t.id === id);
+			const taskIndex = tasks.findIndex(t => t.id === id);
+			let task = tasks[taskIndex];
 			if (id && taskIndex === -1) throw new Error("Task not found");
 
 			if (id) {
-				tasks[taskIndex] = {
-					...tasks[taskIndex],
+				task = tasks[taskIndex] = {
+					...task,
 					name,
 					description,
-					status
+					status,
+					complete_date:
+						task.complete_date ??
+						(status === "Complete" ? new Date() : null)
 				};
 			} else {
-				taskIndex =
-					(tasks as Partial<ProjectTask>[]).push({
-						id: new ObjectId().toString(),
-						order: tasks.length + 1,
-						name,
-						description,
-						status
-					}) - 1;
+				task =
+					tasks[
+						(tasks as Partial<ProjectTask>[]).push({
+							id: new ObjectId().toString(),
+							order: tasks.length + 1,
+							name,
+							description,
+							status
+						}) - 1
+					];
 			}
-			const task = tasks[taskIndex];
 
 			const newOrder = Math.max(1, Math.min(tasks.length, order));
 			if (task.order !== newOrder) {
