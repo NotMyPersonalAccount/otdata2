@@ -2,7 +2,7 @@ import prisma from "@/lib/database/prisma";
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import { z, TypeOf } from "zod";
-import { procedure, router } from "..";
+import { loggedInProcedure, procedure, router } from "..";
 
 const createCheckinSchema = z.object({
 	classId: z.string(),
@@ -21,7 +21,7 @@ const deleteCheckinSchema = z.object({
 export type DeleteCheckinInput = TypeOf<typeof deleteCheckinSchema>;
 
 export const checkinRouter = router({
-	create: procedure
+	create: loggedInProcedure
 		.input(createCheckinSchema)
 		.mutation(async ({ input, ctx }) => {
 			const {
@@ -33,7 +33,6 @@ export const checkinRouter = router({
 				working_on_other
 			} = input;
 
-			if (!ctx.session) throw new Error("Not logged in");
 			if (userId !== ctx.session.currUserId && !ctx.session.admin)
 				throw new Error("Can not create checkin for other user");
 
@@ -77,12 +76,10 @@ export const checkinRouter = router({
 				}
 			});
 		}),
-	delete: procedure
+	delete: loggedInProcedure
 		.input(deleteCheckinSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { id, respondWithLast } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const checkin = await prisma.checkin.findUnique({
 				where: {

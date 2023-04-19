@@ -1,6 +1,6 @@
 import prisma from "@/lib/database/prisma";
 import { TypeOf, z } from "zod";
-import { procedure, router } from "..";
+import { adminProcedure, procedure, router } from "..";
 import { Prisma } from "@prisma/client";
 import { queryOptionsAvailable } from "@/components/forms/FindStudentForm";
 
@@ -16,39 +16,37 @@ const findUserSchema = z.object({
 export type FindUserInput = TypeOf<typeof findUserSchema>;
 
 export const userRouter = router({
-	getQueryOptions: procedure.input(z.object({})).query(async ({ ctx }) => {
-		if (!ctx.session) throw new Error("Not logged in");
-		if (!ctx.session.admin && !ctx.session.originalData)
-			throw new Error("Not authorized");
+	getQueryOptions: adminProcedure
+		.input(z.object({}))
+		.query(async ({ ctx }) => {
+			const options = {} as {
+				[key: string]: {
+					label: string;
+					value: string;
+				}[];
+			};
+			await Promise.all(
+				Object.keys(queryOptionsAvailable).map(async (key: string) => {
+					const field = key as Prisma.UserScalarFieldEnum;
+					options[field] = (
+						await prisma.user.findMany({
+							distinct: field,
+							orderBy: { [field]: "asc" }
+						})
+					)
+						.filter(user => user[field])
+						.map(user => {
+							return {
+								label: user[field] as string,
+								value: user[field] as string
+							};
+						});
+				})
+			);
 
-		const options = {} as {
-			[key: string]: {
-				label: string;
-				value: string;
-			}[];
-		};
-		await Promise.all(
-			Object.keys(queryOptionsAvailable).map(async (key: string) => {
-				const field = key as Prisma.UserScalarFieldEnum;
-				options[field] = (
-					await prisma.user.findMany({
-						distinct: field,
-						orderBy: { [field]: "asc" }
-					})
-				)
-					.filter(user => user[field])
-					.map(user => {
-						return {
-							label: user[field] as string,
-							value: user[field] as string
-						};
-					});
-			})
-		);
-
-		return options;
-	}),
-	find: procedure.input(findUserSchema).query(async ({ input, ctx }) => {
+			return options;
+		}),
+	find: adminProcedure.input(findUserSchema).query(async ({ input, ctx }) => {
 		const {
 			first_name,
 			last_name,
@@ -58,10 +56,6 @@ export const userRouter = router({
 			grade,
 			aeries_gender
 		} = input;
-
-		if (!ctx.session) throw new Error("Not logged in");
-		if (!ctx.session.admin && !ctx.session.originalData)
-			throw new Error("Not authorized");
 
 		return await prisma.user.findMany({
 			where: {

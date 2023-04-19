@@ -1,6 +1,6 @@
 import prisma from "@/lib/database/prisma";
 import { z, TypeOf } from "zod";
-import { procedure, router } from "..";
+import { loggedInProcedure, router } from "..";
 import { ObjectId } from "bson";
 import { ProjectTask } from "@prisma/client";
 import { CheckinStatus, TaskStatus } from "@/lib/enums/project";
@@ -49,12 +49,10 @@ const deleteCheckinSchema = z.object({
 export type DeleteCheckinInput = TypeOf<typeof deleteCheckinSchema>;
 
 export const projectRouter = router({
-	create: procedure
+	create: loggedInProcedure
 		.input(createProjectSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { classId, name } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const _class = await prisma.googleClassroom.findUnique({
 				where: {
@@ -74,12 +72,10 @@ export const projectRouter = router({
 				}
 			});
 		}),
-	delete: procedure
+	delete: loggedInProcedure
 		.input(deleteProjectScehma)
 		.mutation(async ({ input, ctx }) => {
 			const { id } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const project = await prisma.project.findUnique({
 				where: {
@@ -101,12 +97,10 @@ export const projectRouter = router({
 			});
 			return true;
 		}),
-	createOrEditTask: procedure
+	createOrEditTask: loggedInProcedure
 		.input(createOrEditTaskSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId, order, name, description, status } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const project = await prisma.project.findUnique({
 				where: {
@@ -170,12 +164,10 @@ export const projectRouter = router({
 				}
 			});
 		}),
-	deleteTask: procedure
+	deleteTask: loggedInProcedure
 		.input(deleteTaskSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const project = await prisma.project.findUnique({
 				where: {
@@ -204,12 +196,10 @@ export const projectRouter = router({
 				}
 			});
 		}),
-	createOrEditCheckin: procedure
+	createOrEditCheckin: loggedInProcedure
 		.input(createOrEditCheckinSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId, taskId, status, description } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const project = await prisma.project.findUnique({
 				where: {
@@ -256,12 +246,10 @@ export const projectRouter = router({
 				});
 			}
 		}),
-	deleteCheckin: procedure
+	deleteCheckin: loggedInProcedure
 		.input(deleteCheckinSchema)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId } = input;
-
-			if (!ctx.session) throw new Error("Not logged in");
 
 			const project = await prisma.project.findUnique({
 				where: {
