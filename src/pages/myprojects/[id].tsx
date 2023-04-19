@@ -15,6 +15,7 @@ import { trpc } from "@/lib/api/trpc";
 import CreateOrEditTaskModal from "@/components/modals/CreateOrEditTask";
 import dayjs from "dayjs";
 import CreateProjectCheckinModal from "@/components/modals/CreateProjectCheckin";
+import { TaskStatus } from "@/lib/enums/project";
 
 type Props = {
 	data: string;
@@ -117,7 +118,11 @@ function TaskRow({ project, task, onEdit }: TaskRowProps) {
 					{task.order}
 				</div>
 			</td>
-			<td>{task.status}</td>
+			<td>
+				{task.status === TaskStatus.Complete
+					? `${task.status} ${dayjs(task.complete_date).calendar()}`
+					: task.status}
+			</td>
 			<td>{task.name}</td>
 			<td>{task.description}</td>
 		</tr>
