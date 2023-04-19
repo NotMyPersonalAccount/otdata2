@@ -5,6 +5,7 @@ import Form from "./Form";
 import FormSelect from "./FormSelect";
 import FormInput from "./FormInput";
 import { CreateOrEditCheckinInput } from "@/lib/api/routers/project";
+import { CheckinStatus, TaskStatus } from "@/lib/enums/project";
 
 type Props = {
 	project: Project;
@@ -34,9 +35,11 @@ export default function CreateProjectCheckinForm({ project, onCreate }: Props) {
 				))}
 			</FormSelect>
 			<FormSelect name="status" label="Status">
-				<option value="Green">Green</option>
-				<option value="Yellow">Yellow</option>
-				<option value="Red">Red</option>
+				{Object.values(CheckinStatus).map(status => (
+					<option key={status} value={status}>
+						{status}
+					</option>
+				))}
 			</FormSelect>
 			<FormInput
 				name="description"

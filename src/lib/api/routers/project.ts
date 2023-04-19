@@ -3,6 +3,7 @@ import { z, TypeOf } from "zod";
 import { procedure, router } from "..";
 import { ObjectId } from "bson";
 import { ProjectTask } from "@prisma/client";
+import { CheckinStatus, TaskStatus } from "@/lib/enums/project";
 
 const createProjectSchema = z.object({
 	classId: z.string(),
@@ -21,7 +22,7 @@ const createOrEditTaskSchema = z.object({
 	order: z.number(),
 	name: z.string(),
 	description: z.string(),
-	status: z.string()
+	status: z.nativeEnum(TaskStatus)
 });
 export type CreateOrEditTaskInput = TypeOf<typeof createOrEditTaskSchema>;
 
@@ -31,11 +32,12 @@ const deleteTaskSchema = z.object({
 });
 export type DeleteTaskInput = TypeOf<typeof deleteTaskSchema>;
 
+
 const createOrEditCheckinSchema = z.object({
 	id: z.string().optional(),
 	projectId: z.string(),
 	taskId: z.string(),
-	status: z.string(),
+	status: z.nativeEnum(CheckinStatus),
 	description: z.string()
 });
 export type CreateOrEditCheckinInput = TypeOf<typeof createOrEditCheckinSchema>;

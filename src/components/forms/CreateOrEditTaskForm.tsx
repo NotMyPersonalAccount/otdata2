@@ -5,6 +5,7 @@ import Form from "./Form";
 import FormSelect from "./FormSelect";
 import FormInput from "./FormInput";
 import { CreateOrEditTaskInput } from "@/lib/api/routers/project";
+import { TaskStatus } from "@/lib/enums/project";
 
 type Props = {
 	project: Project;
@@ -51,9 +52,11 @@ export default function CreateOrEditTaskForm({
 				label="Status"
 				defaultValue={task?.status}
 			>
-				<option value="New">New</option>
-				<option value="In Progress">In Progress</option>
-				<option value="Complete">Complete</option>
+				{Object.values(TaskStatus).map(status => (
+					<option key={status} value={status}>
+						{status}
+					</option>
+				))}
 			</FormSelect>
 			<FormInput
 				name="description"
