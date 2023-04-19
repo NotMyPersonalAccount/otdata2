@@ -14,6 +14,7 @@ import CreateTaskModal from "@/components/modals/CreateOrEditTask";
 import { trpc } from "@/lib/api/trpc";
 import CreateOrEditTaskModal from "@/components/modals/CreateOrEditTask";
 import dayjs from "dayjs";
+import CreateProjectCheckinModal from "@/components/modals/CreateProjectCheckin";
 
 type Props = {
 	data: string;
@@ -55,6 +56,23 @@ function CreateTaskButton({ project, onCreate }: CreateTaskButtonProps) {
 	return (
 		<>
 			<CreateTaskModal
+				project={project}
+				onCreate={onCreate}
+				open={open}
+				setOpen={setOpen}
+			/>
+			<PillButton onClick={() => setOpen(true)}>
+				<MdAssignmentAdd />
+			</PillButton>
+		</>
+	);
+}
+
+function CreateCheckinButton({ project, onCreate }: CreateTaskButtonProps) {
+	const [open, setOpen] = useState(false);
+	return (
+		<>
+			<CreateProjectCheckinModal
 				project={project}
 				onCreate={onCreate}
 				open={open}
@@ -166,7 +184,16 @@ export default function Project({ data }: Props) {
 					</tbody>
 				</table>
 			</PageSection>
-			<PageSection title="Checkins" className="overflow-x-auto">
+			<PageSection
+				title="Checkins"
+				titleSuffix={
+					<CreateCheckinButton
+						project={project}
+						onCreate={setProject}
+					/>
+				}
+				className="overflow-x-auto"
+			>
 				<table>
 					<thead>
 						<tr>
