@@ -10,21 +10,32 @@ import { MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
 import { useEffect, useState } from "react";
 
-type ParsedClass = {
-	id: string;
-	googleId: string;
-	name: string;
-	status: string;
-	teacherName: string;
-};
-
-type Props = {
-	classes: ParsedClass[];
-};
-
-type ClassProps = ParsedClass & {
+type Class = Awaited<ReturnType<typeof getClasses>>[0];
+type ClassProps = Class & {
 	onDelete?: (_class: GEnrollment) => void;
 };
+type Props = {
+	classes: string;
+};
+
+async function getClasses(userId: string) {
+	return await prisma.gEnrollment.findMany({
+		where: {
+			owner_id: userId
+		},
+		select: {
+			id: true,
+			user_classname: true,
+			status: true,
+			google_classroom: {
+				select: {
+					class_dict: true,
+					teacher_dict: true
+				}
+			}
+		}
+	});
+}
 
 export const getServerSideProps = enforceAuthentication(async context => {
 	const session = await getServerSession(
@@ -33,32 +44,16 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		authOptions
 	);
 
-	const data = await prisma.gEnrollment.findMany({
-		where: {
-			owner_id: session!.currUserId
-		},
-		include: {
-			google_classroom: true
-		}
-	});
-	const parsedData = data.map(enrollment => {
-		const classInfo = enrollment.google_classroom!
-			.class_dict! as Prisma.JsonObject;
-		const teacherInfo = enrollment.google_classroom!
-			.teacher_dict! as Prisma.JsonObject;
-
-		return {
-			id: enrollment.id,
-			googleId: classInfo.id as string,
-			name: enrollment.user_classname ?? (classInfo.name as string),
-			status: enrollment.status,
-			teacherName: (teacherInfo.name as Prisma.JsonObject)
-				.fullName as string
-		};
-	});
-	parsedData.sort((a, b) => {
+	const data = await getClasses(session!.currUserId);
+	data.sort((a, b) => {
 		return a.status === b.status
-			? a.name.localeCompare(b.name)
+			? (
+					(a.google_classroom!.class_dict as Prisma.JsonObject)
+						.name as string
+			  ).localeCompare(
+					(b.google_classroom!.class_dict as Prisma.JsonObject)
+						.name as string
+			  )
 			: a.status === "Active"
 			? -1
 			: 1;
@@ -66,27 +61,39 @@ export const getServerSideProps = enforceAuthentication(async context => {
 
 	return {
 		props: {
-			classes: parsedData
+			classes: JSON.stringify(data)
 		}
 	};
 });
 
 function Class({
 	id,
-	googleId,
-	name,
 	status,
-	teacherName,
+	user_classname,
+	google_classroom,
 	onDelete
 }: ClassProps) {
+	const classInfo = google_classroom!.class_dict as Prisma.JsonObject;
 	return (
 		<div className="border-b-2 last:border-b-0 px-4 sm:px-6 pt-3 pb-1 border-gray-300">
 			<div className="flex flex-wrap justify-between gap-4">
 				<div className="flex flex-col w-72 sm:w-1/2">
-					<Link href={`/classdash/${googleId}`} className="text-lg">
-						{name}
+					<Link
+						href={`/classdash/${classInfo.id as string}`}
+						className="text-lg"
+					>
+						{user_classname || (classInfo.name as string)}
 					</Link>
-					<span className="text-gray-500">{teacherName}</span>
+					<span className="text-gray-500">
+						{
+							(
+								(
+									google_classroom!
+										.teacher_dict as Prisma.JsonObject
+								).name as Prisma.JsonObject
+							).fullName as string
+						}
+					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">
 					<span>{status === "Active" ? "Active" : "Inactive"}</span>
@@ -111,9 +118,9 @@ function Class({
 }
 
 export default function ClassList({ classes: initialClasses }: Props) {
-	const [classes, setClasses] = useState(initialClasses);
+	const [classes, setClasses] = useState<Class[]>(JSON.parse(initialClasses));
 	useEffect(() => {
-		setClasses(initialClasses);
+		setClasses(JSON.parse(initialClasses));
 	}, [initialClasses]);
 
 	return (
