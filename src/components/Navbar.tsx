@@ -35,6 +35,20 @@ function NavbarLink(
 	);
 }
 
+function NavbarClock() {
+	const [time, setTime] = useState("");
+	useEffect(() => {
+		function updateTime() {
+			setTime(dayjs().format("h:mm:ss"));
+		}
+
+		const interval = setInterval(updateTime, 1000);
+		updateTime();
+		return () => clearInterval(interval);
+	}, []);
+	return <p className="w-16">{time}</p>;
+}
+
 function Skeleton({ children }: { children: ReactNode }) {
 	const { status } = useSession();
 	const [color, setColor] = useState("");
@@ -53,17 +67,6 @@ function Skeleton({ children }: { children: ReactNode }) {
 export default function Navbar() {
 	const [toggled, setToggled] = useState(false);
 	const { data: session, status } = useSession();
-
-	const [time, setTime] = useState("");
-	useEffect(() => {
-		function updateTime() {
-			setTime(dayjs().format("h:mm:ss"));
-		}
-
-		const interval = setInterval(updateTime, 1000);
-		updateTime();
-		return () => clearInterval(interval);
-	}, []);
 
 	return (
 		<div
@@ -123,7 +126,7 @@ export default function Navbar() {
 						</Skeleton>
 					</>
 				)}
-				<p className="w-16">{time}</p>
+				<NavbarClock />
 			</div>
 		</div>
 	);
