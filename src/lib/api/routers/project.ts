@@ -1,6 +1,6 @@
 import prisma from "@/lib/database/prisma";
 import { z, TypeOf } from "zod";
-import { loggedInProcedure, router } from "..";
+import { loggedInProcedure, router, withOwnedProject } from "..";
 import { ObjectId } from "bson";
 import { ProjectTask } from "@prisma/client";
 import { CheckinStatus, TaskStatus } from "@/lib/enums/project";
@@ -31,7 +31,6 @@ const deleteTaskSchema = z.object({
 	projectId: z.string()
 });
 export type DeleteTaskInput = TypeOf<typeof deleteTaskSchema>;
-
 
 const createOrEditCheckinSchema = z.object({
 	id: z.string().optional(),
@@ -99,16 +98,11 @@ export const projectRouter = router({
 		}),
 	createOrEditTask: loggedInProcedure
 		.input(createOrEditTaskSchema)
+		.use(withOwnedProject)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId, order, name, description, status } = input;
 
-			const project = await prisma.project.findUnique({
-				where: {
-					id: projectId
-				}
-			});
-			if (!project) throw new Error("Project not found");
-
+			const project = ctx.project;
 			const tasks = project.tasks;
 			const taskIndex = tasks.findIndex(t => t.id === id);
 			let task = tasks[taskIndex];
@@ -166,16 +160,11 @@ export const projectRouter = router({
 		}),
 	deleteTask: loggedInProcedure
 		.input(deleteTaskSchema)
+		.use(withOwnedProject)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId } = input;
 
-			const project = await prisma.project.findUnique({
-				where: {
-					id: projectId
-				}
-			});
-			if (!project) throw new Error("Project not found");
-
+			const project = ctx.project;
 			const tasks = project.tasks;
 			const taskIndex = tasks.findIndex(task => task.id === id);
 			if (taskIndex === -1) throw new Error("Task not found");
@@ -198,16 +187,11 @@ export const projectRouter = router({
 		}),
 	createOrEditCheckin: loggedInProcedure
 		.input(createOrEditCheckinSchema)
+		.use(withOwnedProject)
 		.mutation(async ({ input, ctx }) => {
 			const { id, projectId, taskId, status, description } = input;
 
-			const project = await prisma.project.findUnique({
-				where: {
-					id: projectId
-				}
-			});
-			if (!project) throw new Error("Project not found");
-
+			const project = ctx.project;
 			const task = project.tasks.find(task => task.id === taskId);
 			if (!task) throw new Error("Task not found");
 
@@ -248,15 +232,9 @@ export const projectRouter = router({
 		}),
 	deleteCheckin: loggedInProcedure
 		.input(deleteCheckinSchema)
-		.mutation(async ({ input, ctx }) => {
+		.use(withOwnedProject)
+		.mutation(async ({ input }) => {
 			const { id, projectId } = input;
-
-			const project = await prisma.project.findUnique({
-				where: {
-					id: projectId
-				}
-			});
-			if (!project) throw new Error("Project not found");
 
 			return await prisma.project.update({
 				where: {
