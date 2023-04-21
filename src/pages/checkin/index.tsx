@@ -107,6 +107,7 @@ function Class({
 								});
 								onDelete?.(_class);
 							}}
+							title="Delete Class"
 						>
 							<MdDeleteOutline size={20} />
 						</Button>

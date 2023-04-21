@@ -106,7 +106,7 @@ function CreateTaskButton({ project, onCreate }: CreateTaskButtonProps) {
 				open={open}
 				setOpen={setOpen}
 			/>
-			<PillButton onClick={() => setOpen(true)}>
+			<PillButton onClick={() => setOpen(true)} title="Create Task">
 				<MdAssignmentAdd />
 			</PillButton>
 		</>
@@ -129,7 +129,10 @@ function TaskRow({ project, task, onEdit }: TaskRowProps) {
 					/>
 					{session?.currUserId === project.student_id && (
 						<>
-							<Button onClick={() => setEditOpen(true)}>
+							<Button
+								onClick={() => setEditOpen(true)}
+								title="Edit Task"
+							>
 								<MdModeEditOutline size={20} />
 							</Button>
 							<Button
@@ -141,6 +144,7 @@ function TaskRow({ project, task, onEdit }: TaskRowProps) {
 										});
 									onEdit?.(result);
 								}}
+								title="Delete Task"
 							>
 								<MdDeleteOutline size={20} />
 							</Button>
@@ -214,7 +218,7 @@ function CreateCheckinButton({ project, onCreate }: CreateTaskButtonProps) {
 				open={open}
 				setOpen={setOpen}
 			/>
-			<PillButton onClick={() => setOpen(true)}>
+			<PillButton onClick={() => setOpen(true)} title="Create Checkin">
 				<MdAssignmentAdd />
 			</PillButton>
 		</>
@@ -236,6 +240,7 @@ function CheckinRow({ project, checkin, onDelete }: CheckinRowProps) {
 								});
 							onDelete?.(result);
 						}}
+						title="Delete Checkin"
 					>
 						<MdDeleteOutline size={20} />
 					</Button>

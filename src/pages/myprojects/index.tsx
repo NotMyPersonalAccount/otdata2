@@ -102,6 +102,7 @@ function Project({ id, name, google_classroom, onDelete }: ProjectProps) {
 								});
 								onDelete?.();
 							}}
+							title="Delete Project"
 						>
 							<MdDeleteOutline size={20} />
 						</Button>
@@ -123,7 +124,7 @@ function CreateProjectButton({ classes, onCreate }: CreateProjectButtonProps) {
 				open={open}
 				setOpen={setOpen}
 			/>
-			<PillButton className="text-lg" onClick={() => setOpen(true)}>
+			<PillButton className="text-lg" onClick={() => setOpen(true)} title="Create Project">
 				<MdAssignmentAdd size={20} />
 			</PillButton>
 		</>
