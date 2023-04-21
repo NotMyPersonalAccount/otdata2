@@ -29,7 +29,7 @@ export async function forceLogin(context: GetServerSidePropsContext) {
 		callbackUrl: url,
 		cookies,
 		csrfToken: await getCsrfToken({ req }),
-		host: `${process.env.NODE_ENV === "development" ? "http" : "https"}://${
+		origin: `${process.env.NODE_ENV === "development" ? "http" : "https"}://${
 			headers["host"]
 		}`,
 		isPost: true,
