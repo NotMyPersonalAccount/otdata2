@@ -63,11 +63,7 @@ function CheckinValue({ label, children }: CheckinValueProps) {
 }
 
 export default function ClassDash({ data, lastCheckinData }: Props) {
-	const _class: GoogleClassroom & {
-		checkins: Checkin[];
-		class_dict: Prisma.JsonObject;
-		coursework_dict: Prisma.JsonObject;
-	} = JSON.parse(data);
+	const _class: GoogleClassroom = JSON.parse(data);
 	const [lastCheckin, setLastCheckin] = useState<Checkin>();
 	useEffect(() => {
 		setLastCheckin(JSON.parse(lastCheckinData));
@@ -77,11 +73,7 @@ export default function ClassDash({ data, lastCheckinData }: Props) {
 			<PageSection title="Checkins">
 				<CheckinForm
 					classId={_class.google_classroom_id!}
-					assignments={
-						(_class.coursework_dict?.courseWork as {
-							[key: string]: any;
-						}[]) ?? []
-					}
+					assignments={_class.coursework_dict?.courseWork ?? []}
 					onCreate={setLastCheckin}
 				/>
 				{lastCheckin && (

@@ -47,12 +47,8 @@ export const getServerSideProps = enforceAuthentication(async context => {
 	const data = await getClasses(session!.currUserId);
 	data.sort((a, b) => {
 		return a.status === b.status
-			? (
-					(a.google_classroom!.class_dict as Prisma.JsonObject)
-						.name as string
-			  ).localeCompare(
-					(b.google_classroom!.class_dict as Prisma.JsonObject)
-						.name as string
+			? a.google_classroom!.class_dict!.name!.localeCompare(
+					b.google_classroom!.class_dict!.name!
 			  )
 			: a.status === "Active"
 			? -1
@@ -73,26 +69,19 @@ function Class({
 	google_classroom,
 	onDelete
 }: ClassProps) {
-	const classInfo = google_classroom!.class_dict as Prisma.JsonObject;
+	const classInfo = google_classroom!.class_dict!;
 	return (
 		<div className="border-b-2 last:border-b-0 px-4 sm:px-6 pt-3 pb-1 border-gray-300">
 			<div className="flex flex-wrap justify-between gap-4">
 				<div className="flex flex-col w-72 sm:w-1/2">
 					<Link
-						href={`/classdash/${classInfo.id as string}`}
+						href={`/classdash/${classInfo.id}`}
 						className="text-lg"
 					>
-						{user_classname || (classInfo.name as string)}
+						{user_classname || classInfo.name}
 					</Link>
 					<span className="text-gray-500">
-						{
-							(
-								(
-									google_classroom!
-										.teacher_dict as Prisma.JsonObject
-								).name as Prisma.JsonObject
-							).fullName as string
-						}
+						{google_classroom!.teacher_dict!.name!.fullName}
 					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">

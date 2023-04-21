@@ -1,5 +1,5 @@
 import { trpc } from "@/lib/api/trpc";
-import { Prisma, Project } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Form from "./Form";
 import FormSelect from "./FormSelect";
@@ -36,12 +36,7 @@ export default function CreateProjectForm({ classes, onCreate }: Props) {
 								key={c.id}
 								value={c.google_classroom.google_classroom_id!}
 							>
-								{
-									(
-										c.google_classroom
-											.class_dict as Prisma.JsonObject
-									).name as string
-								}
+								{c.google_classroom.class_dict!.name}
 							</option>
 						)
 					);

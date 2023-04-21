@@ -5,10 +5,11 @@ import { useSession } from "next-auth/react";
 import Form from "./Form";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
+import { classroom_v1 } from "googleapis";
 
 type Props = {
 	classId: string;
-	assignments: { [key: string]: any }[];
+	assignments: classroom_v1.Schema$CourseWork[];
 	onCreate?: (checkin: Checkin) => void;
 };
 
@@ -46,7 +47,7 @@ export default function CheckinForm({ classId, assignments, onCreate }: Props) {
 				<option value="other">Other</option>
 				{assignments.map((assignment, i) => {
 					return (
-						<option key={i} value={assignment.title}>
+						<option key={i} value={assignment.title!}>
 							{assignment.title}
 						</option>
 					);

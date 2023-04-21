@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -77,8 +81,11 @@ model GoogleClassroom {
   id                       String        @id @default(auto()) @map("_id") @db.ObjectId
   teacher_id               String?       @map("teacher") @db.ObjectId
   teacher                  User?         @relation(fields: [teacher_id], references: [id])
+  /// [Teacher]
   teacher_dict             Json?         @map("gteacherdict")
+  /// [Class]
   class_dict               Json?         @map("gclassdict")
+  /// [CourseWork]
   coursework_dict          Json?         @map("courseworkdict")
   coursework_update        DateTime?     @map("courseworkupdate")
   student_submissions_dict Json?         @map("studsubsdict")

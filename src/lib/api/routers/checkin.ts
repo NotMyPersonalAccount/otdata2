@@ -69,9 +69,7 @@ export const checkinRouter = router({
 					status,
 					working_on,
 					student_id: user.id,
-					google_classroom_name: (
-						_class.class_dict as Prisma.JsonObject
-					).name as string,
+					google_classroom_name: _class.class_dict!.name,
 					classroom_id: _class.id
 				}
 			});

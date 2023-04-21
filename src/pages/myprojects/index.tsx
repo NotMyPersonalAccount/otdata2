@@ -87,10 +87,7 @@ function Project({ id, name, google_classroom, onDelete }: ProjectProps) {
 						{name}
 					</Link>
 					<span className="text-gray-500">
-						{
-							(google_classroom?.class_dict as Prisma.JsonObject)
-								.name as string
-						}
+						{google_classroom?.class_dict!.name}
 					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">
@@ -124,7 +121,7 @@ function CreateProjectButton({ classes, onCreate }: CreateProjectButtonProps) {
 				open={open}
 				setOpen={setOpen}
 			/>
-			<PillButton className="text-lg" onClick={() => setOpen(true)} title="Create Project">
+			<PillButton onClick={() => setOpen(true)} title="Create Project">
 				<MdAssignmentAdd size={20} />
 			</PillButton>
 		</>
