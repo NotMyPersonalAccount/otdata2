@@ -10,6 +10,7 @@ import { MdAssignmentAdd, MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
 import { useEffect, useMemo, useState } from "react";
 import CreateProjectModal from "@/components/modals/CreateProject";
+import { ClassStatus } from "@/lib/enums/class";
 
 type Props = {
 	projects: string;
@@ -57,7 +58,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 		prisma.gEnrollment.findMany({
 			where: {
 				owner_id: session!.currUserId,
-				status: "Active"
+				status: ClassStatus.Active
 			},
 			select: {
 				google_classroom: {

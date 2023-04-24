@@ -9,6 +9,7 @@ import { Button } from "@/components/Button";
 import { MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
 import { useEffect, useState } from "react";
+import { ClassStatus } from "@/lib/enums/class";
 
 type Class = Awaited<ReturnType<typeof getClasses>>[0];
 type ClassProps = Class & {
@@ -50,7 +51,7 @@ export const getServerSideProps = enforceAuthentication(async context => {
 			? a.google_classroom!.class_dict!.name!.localeCompare(
 					b.google_classroom!.class_dict!.name!
 			  )
-			: a.status === "Active"
+			: a.status === ClassStatus.Active
 			? -1
 			: 1;
 	});
@@ -85,7 +86,7 @@ function Class({
 					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">
-					<span>{status === "Active" ? "Active" : "Inactive"}</span>
+					<span>{status === ClassStatus.Active ? ClassStatus.Active : ClassStatus.Inactive}</span>
 					<div className="flex gap-2">
 						{/* TODO: Use icons here */}
 						<span>E</span>
