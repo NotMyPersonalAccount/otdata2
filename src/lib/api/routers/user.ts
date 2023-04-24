@@ -30,7 +30,7 @@ export const userRouter = router({
 					const field = key as Prisma.UserScalarFieldEnum;
 					options[field] = (
 						await prisma.user.findMany({
-							distinct: field,
+							distinct: [field],
 							orderBy: { [field]: "asc" }
 						})
 					)
