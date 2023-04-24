@@ -102,7 +102,10 @@ export default function Navbar() {
 					</button>
 				) : (
 					<>
-						<NavbarLink href="/myprojects" roles={[Role.Student]}>
+						<NavbarLink
+							href="/myprojects"
+							roles={[Role.Student, Role.Teacher]}
+						>
 							Projects
 						</NavbarLink>
 						<NavbarLink href="/findstudent" roles={[Role.Teacher]}>
