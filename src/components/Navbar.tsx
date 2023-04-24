@@ -72,7 +72,7 @@ export default function Navbar() {
 		<div
 			className={classNames(
 				"md:flex justify-between items-center bg-black text-white px-4 py-2 transition-all duration-200 ease-in-out overflow-hidden",
-				{ "max-h-12": !toggled, "max-h-48": toggled }
+				{ "max-h-12": !toggled, "max-h-screen": toggled }
 			)}
 		>
 			<div className="flex flex-1 justify-between">
