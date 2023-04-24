@@ -48,7 +48,28 @@ export const withOwnedProject = middleware(async ({ ctx, next, input }) => {
 	return next({
 		ctx: {
 			...ctx,
-			project
+			project,
+			session: ctx.session
+		}
+	});
+});
+
+export const withOwnedClass = middleware(async ({ ctx, next, input }) => {
+	const { id } = input as { id: string };
+	const _class = await prisma.gEnrollment.findUnique({
+		where: {
+			id
+		}
+	});
+	if (!_class) throw new Error("Class not found");
+	if (_class.owner_id !== ctx.session?.currUserId && !ctx.session?.admin)
+		throw new Error("Can not modify class for other user");
+
+	return next({
+		ctx: {
+			...ctx,
+			_class,
+			session: ctx.session
 		}
 	});
 });
