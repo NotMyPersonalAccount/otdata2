@@ -44,6 +44,11 @@ export const enforceAuthentication: Enforcement = innerFn => async context => {
 		authOptions
 	);
 	if (session === null) return await forceLogin(context);
-	return innerFn?.(context) ?? { props: {} };
+	const result = (await innerFn?.(context)) as {
+		props: { [key: string]: any } | undefined;
+	};
+	return result
+		? { ...result, props: { ...result.props, session } }
+		: { props: {} };
 };
 

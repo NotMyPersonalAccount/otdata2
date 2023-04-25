@@ -55,6 +55,7 @@ export const authOptions: AuthOptions = {
 			return token;
 		},
 		async session({ session, token }) {
+			if (session.user) session.user.image = null;
 			return { ...session, ...token.otdata };
 		}
 	}
