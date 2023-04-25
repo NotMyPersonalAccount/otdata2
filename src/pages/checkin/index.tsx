@@ -38,7 +38,7 @@ async function getClasses(userId: string) {
 	});
 }
 
-export const getServerSideProps = enforceAuthentication(async context => {
+export const getServerSideProps = enforceAuthentication<Props>(async context => {
 	const session = await getServerSession(
 		context.req,
 		context.res,

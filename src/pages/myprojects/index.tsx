@@ -34,50 +34,52 @@ type CreateProjectButtonProps = {
 	onCreate?: (project: Project) => void;
 };
 
-export const getServerSideProps = enforceAuthentication(async context => {
-	const session = await getServerSession(
-		context.req,
-		context.res,
-		authOptions
-	);
-	const [projects, classes] = await Promise.all([
-		prisma.project.findMany({
-			where: {
-				student_id: session!.currUserId
-			},
-			select: {
-				id: true,
-				name: true,
-				google_classroom: {
-					select: {
-						class_dict: true
+export const getServerSideProps = enforceAuthentication<Props>(
+	async context => {
+		const session = await getServerSession(
+			context.req,
+			context.res,
+			authOptions
+		);
+		const [projects, classes] = await Promise.all([
+			prisma.project.findMany({
+				where: {
+					student_id: session!.currUserId
+				},
+				select: {
+					id: true,
+					name: true,
+					google_classroom: {
+						select: {
+							class_dict: true
+						}
 					}
 				}
-			}
-		}),
-		prisma.gEnrollment.findMany({
-			where: {
-				owner_id: session!.currUserId,
-				status: ClassStatus.Active
-			},
-			select: {
-				google_classroom: {
-					select: {
-						id: true,
-						google_classroom_id: true,
-						class_dict: true
+			}),
+			prisma.gEnrollment.findMany({
+				where: {
+					owner_id: session!.currUserId,
+					status: ClassStatus.Active
+				},
+				select: {
+					google_classroom: {
+						select: {
+							id: true,
+							google_classroom_id: true,
+							class_dict: true
+						}
 					}
 				}
+			})
+		]);
+		return {
+			props: {
+				projects: JSON.stringify(projects),
+				classes: JSON.stringify(classes)
 			}
-		})
-	]);
-	return {
-		props: {
-			projects: JSON.stringify(projects),
-			classes: JSON.stringify(classes)
-		}
-	};
-});
+		};
+	}
+);
 
 function Project({ id, name, google_classroom, onDelete }: ProjectProps) {
 	return (

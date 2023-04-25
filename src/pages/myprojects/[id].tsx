@@ -44,19 +44,21 @@ type CheckinRowProps = {
 	onDelete?: (project: Project) => void;
 };
 
-export const getServerSideProps = enforceAuthentication(async context => {
-	const project = await prisma.project.findUnique({
-		where: {
-			id: context.query.id as string
-		}
-	});
-	if (!project) return sendError("Project not found");
-	return {
-		props: {
-			data: JSON.stringify(project)
-		}
-	};
-});
+export const getServerSideProps = enforceAuthentication<Props>(
+	async context => {
+		const project = await prisma.project.findUnique({
+			where: {
+				id: context.query.id as string
+			}
+		});
+		if (!project) return sendError("Project not found");
+		return {
+			props: {
+				data: JSON.stringify(project)
+			}
+		};
+	}
+);
 
 function TaskSection({ project, setProject }: SectionProps) {
 	const { data: session } = useSession();
