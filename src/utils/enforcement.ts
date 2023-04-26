@@ -1,8 +1,8 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { GetServerSideProps } from "next";
-import { getServerSession } from "next-auth";
 import { forceLogin, sendError } from "./error_handling";
 import { Role } from "@/lib/enums/role";
+import { getServerSessionCached } from "@/lib/auth";
 
 type Enforcement = <T extends { [key: string]: any }>(
 	innerFn?: GetServerSideProps<T | ErrorProps>
@@ -16,7 +16,7 @@ type ErrorProps =
 
 export const enforceTeacher: Enforcement = innerFn =>
 	enforceAuthentication(async context => {
-		const session = await getServerSession(
+		const session = await getServerSessionCached(
 			context.req,
 			context.res,
 			authOptions
@@ -28,7 +28,7 @@ export const enforceTeacher: Enforcement = innerFn =>
 
 export const enforceAdmin: Enforcement = innerFn =>
 	enforceAuthentication(async context => {
-		const session = await getServerSession(
+		const session = await getServerSessionCached(
 			context.req,
 			context.res,
 			authOptions
@@ -38,7 +38,7 @@ export const enforceAdmin: Enforcement = innerFn =>
 	});
 
 export const enforceAuthentication: Enforcement = innerFn => async context => {
-	const session = await getServerSession(
+	const session = await getServerSessionCached(
 		context.req,
 		context.res,
 		authOptions

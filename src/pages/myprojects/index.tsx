@@ -1,20 +1,15 @@
 import prisma from "@/lib/database/prisma";
 import { authOptions } from "../api/auth/[...nextauth]";
-import { getServerSession } from "next-auth";
 import { enforceAuthentication } from "@/utils/enforcement";
-import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { Page, PageSection } from "@/components/Page";
 import { Button, PillButton } from "@/components/Button";
 import { MdAssignmentAdd, MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
-<<<<<<< HEAD
-import { useEffect, useMemo, useState } from "react";
-=======
 import { useEffect, useState } from "react";
->>>>>>> e679b59 (squash project)
 import CreateProjectModal from "@/components/modals/CreateProject";
 import { ClassStatus } from "@/lib/enums/class";
+import { getServerSessionCached } from "@/lib/auth";
 
 export type Project = Awaited<ReturnType<typeof getProjects>>[0];
 export type Class = Awaited<ReturnType<typeof getClasses>>[0];
@@ -71,7 +66,7 @@ async function getClasses(userId: string) {
 
 export const getServerSideProps = enforceAuthentication<Props>(
 	async context => {
-		const session = await getServerSession(
+		const session = await getServerSessionCached(
 			context.req,
 			context.res,
 			authOptions

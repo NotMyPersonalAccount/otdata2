@@ -1,7 +1,6 @@
 import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
-import { GEnrollment, Prisma } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import { GEnrollment } from "@prisma/client";
 import Link from "next/link";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { Page, PageSection } from "@/components/Page";
@@ -10,6 +9,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
 import { useEffect, useState } from "react";
 import { ClassStatus } from "@/lib/enums/class";
+import { getServerSessionCached } from "@/lib/auth";
 
 type Class = Awaited<ReturnType<typeof getClasses>>[0];
 type ClassProps = Class & {
@@ -38,30 +38,32 @@ async function getClasses(userId: string) {
 	});
 }
 
-export const getServerSideProps = enforceAuthentication<Props>(async context => {
-	const session = await getServerSession(
-		context.req,
-		context.res,
-		authOptions
-	);
+export const getServerSideProps = enforceAuthentication<Props>(
+	async context => {
+		const session = await getServerSessionCached(
+			context.req,
+			context.res,
+			authOptions
+		);
 
-	const data = await getClasses(session!.currUserId);
-	data.sort((a, b) => {
-		return a.status === b.status
-			? a.google_classroom!.class_dict!.name!.localeCompare(
-					b.google_classroom!.class_dict!.name!
-			  )
-			: a.status === ClassStatus.Active
-			? -1
-			: 1;
-	});
+		const data = await getClasses(session!.currUserId);
+		data.sort((a, b) => {
+			return a.status === b.status
+				? a.google_classroom!.class_dict!.name!.localeCompare(
+						b.google_classroom!.class_dict!.name!
+				  )
+				: a.status === ClassStatus.Active
+				? -1
+				: 1;
+		});
 
-	return {
-		props: {
-			classes: data
-		}
-	};
-});
+		return {
+			props: {
+				classes: data
+			}
+		};
+	}
+);
 
 function Class({
 	id,
@@ -86,7 +88,11 @@ function Class({
 					</span>
 				</div>
 				<div className="flex justify-between sm:justify-start items-center w-full sm:w-auto gap-4">
-					<span>{status === ClassStatus.Active ? ClassStatus.Active : ClassStatus.Inactive}</span>
+					<span>
+						{status === ClassStatus.Active
+							? ClassStatus.Active
+							: ClassStatus.Inactive}
+					</span>
 					<div className="flex gap-2">
 						{/* TODO: Use icons here */}
 						<span>E</span>

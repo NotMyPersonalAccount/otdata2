@@ -4,12 +4,12 @@ import { trpc } from "@/lib/api/trpc";
 import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { sendError } from "@/utils/error_handling";
-import { Checkin, GoogleClassroom, Prisma } from "@prisma/client";
+import { Checkin, GoogleClassroom } from "@prisma/client";
 import dayjs from "dayjs";
-import { getServerSession } from "next-auth";
 import { ReactNode, useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { Page, PageSection } from "@/components/Page";
+import { getServerSessionCached } from "@/lib/auth";
 
 type Props = {
 	data: string;
@@ -22,7 +22,7 @@ type CheckinValueProps = {
 };
 
 export const getServerSideProps = enforceAuthentication<Props>(async context => {
-	const session = await getServerSession(
+	const session = await getServerSessionCached(
 		context.req,
 		context.res,
 		authOptions
