@@ -16,7 +16,7 @@ type ClassProps = Class & {
 	onDelete?: (_class: GEnrollment) => void;
 };
 type Props = {
-	classes: string;
+	classes: Class[];
 };
 
 async function getClasses(userId: string) {
@@ -58,7 +58,7 @@ export const getServerSideProps = enforceAuthentication<Props>(async context => 
 
 	return {
 		props: {
-			classes: JSON.stringify(data)
+			classes: data
 		}
 	};
 });
@@ -109,10 +109,8 @@ function Class({
 }
 
 export default function ClassList({ classes: initialClasses }: Props) {
-	const [classes, setClasses] = useState<Class[]>(JSON.parse(initialClasses));
-	useEffect(() => {
-		setClasses(JSON.parse(initialClasses));
-	}, [initialClasses]);
+	const [classes, setClasses] = useState(initialClasses);
+	useEffect(() => setClasses(initialClasses), [initialClasses]);
 
 	return (
 		<Page pageTitle="Your Classes">
