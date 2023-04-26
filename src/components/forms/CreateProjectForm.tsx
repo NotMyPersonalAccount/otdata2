@@ -5,15 +5,12 @@ import Form from "./Form";
 import FormSelect from "./FormSelect";
 import FormInput from "./FormInput";
 import { CreateProjectInput } from "@/lib/api/routers/project";
+import type {Class, Project} from "@/pages/myprojects/index";
 
 type Props = {
-	classes: Prisma.GEnrollmentGetPayload<{
-		include: { google_classroom: true };
-	}>[];
+	classes: Class[];
 	onCreate?: (
-		project: Prisma.ProjectGetPayload<{
-			include: { google_classroom: true };
-		}>
+		project: Project
 	) => void;
 };
 

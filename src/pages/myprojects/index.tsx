@@ -8,31 +8,66 @@ import { Page, PageSection } from "@/components/Page";
 import { Button, PillButton } from "@/components/Button";
 import { MdAssignmentAdd, MdDeleteOutline } from "react-icons/md";
 import { trpc } from "@/lib/api/trpc";
+<<<<<<< HEAD
 import { useEffect, useMemo, useState } from "react";
+=======
+import { useEffect, useState } from "react";
+>>>>>>> e679b59 (squash project)
 import CreateProjectModal from "@/components/modals/CreateProject";
 import { ClassStatus } from "@/lib/enums/class";
 
+export type Project = Awaited<ReturnType<typeof getProjects>>[0];
+export type Class = Awaited<ReturnType<typeof getClasses>>[0];
+
 type Props = {
-	projects: string;
-	classes: string;
+	projects: Project[];
+	classes: Class[];
 };
 
-type Project = Prisma.ProjectGetPayload<{
-	include: { google_classroom: true };
-}>;
-
-type ProjectProps = Prisma.ProjectGetPayload<{
-	include: { google_classroom: true };
-}> & {
+type ProjectProps = Project & {
 	onDelete?: () => void;
 };
 
 type CreateProjectButtonProps = {
-	classes: Prisma.GEnrollmentGetPayload<{
-		include: { google_classroom: true };
-	}>[];
+	classes: Class[];
 	onCreate?: (project: Project) => void;
 };
+
+async function getProjects(userId: string) {
+	return await prisma.project.findMany({
+		where: {
+			student_id: userId
+		},
+		select: {
+			id: true,
+			name: true,
+			google_classroom: {
+				select: {
+					class_dict: true
+				}
+			}
+		}
+	});
+}
+
+async function getClasses(userId: string) {
+	return await prisma.gEnrollment.findMany({
+		where: {
+			owner_id: userId,
+			status: ClassStatus.Active
+		},
+		select: {
+			id: true,
+			google_classroom: {
+				select: {
+					id: true,
+					google_classroom_id: true,
+					class_dict: true
+				}
+			}
+		}
+	});
+}
 
 export const getServerSideProps = enforceAuthentication<Props>(
 	async context => {
@@ -42,40 +77,13 @@ export const getServerSideProps = enforceAuthentication<Props>(
 			authOptions
 		);
 		const [projects, classes] = await Promise.all([
-			prisma.project.findMany({
-				where: {
-					student_id: session!.currUserId
-				},
-				select: {
-					id: true,
-					name: true,
-					google_classroom: {
-						select: {
-							class_dict: true
-						}
-					}
-				}
-			}),
-			prisma.gEnrollment.findMany({
-				where: {
-					owner_id: session!.currUserId,
-					status: ClassStatus.Active
-				},
-				select: {
-					google_classroom: {
-						select: {
-							id: true,
-							google_classroom_id: true,
-							class_dict: true
-						}
-					}
-				}
-			})
+			getProjects(session!.currUserId),
+			getClasses(session!.currUserId)
 		]);
 		return {
 			props: {
-				projects: JSON.stringify(projects),
-				classes: JSON.stringify(classes)
+				projects: projects,
+				classes: classes
 			}
 		};
 	}
@@ -132,15 +140,11 @@ function CreateProjectButton({ classes, onCreate }: CreateProjectButtonProps) {
 }
 
 export default function Projects({
-	projects: encodedProjects,
-	classes: encodedClasses
+	projects: initialProjects,
+	classes
 }: Props) {
-	const [projects, setProjects] = useState<Project[]>([]);
-	const classes = useMemo(() => JSON.parse(encodedClasses), [encodedClasses]);
-
-	useEffect(() => {
-		setProjects(JSON.parse(encodedProjects));
-	}, [encodedProjects]);
+	const [projects, setProjects] = useState(initialProjects);
+	useEffect(() => setProjects(initialProjects), [initialProjects]);
 
 	return (
 		<Page

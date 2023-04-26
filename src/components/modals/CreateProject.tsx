@@ -1,15 +1,12 @@
-import { Prisma, Project } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Modal from "./Modal";
 import CreateProjectForm from "../forms/CreateProjectForm";
+import type {Class, Project} from "@/pages/myprojects/index";
 
 type Props = {
-	classes: Prisma.GEnrollmentGetPayload<{
-		include: { google_classroom: true };
-	}>[];
+	classes: Class[];
 	onCreate?: (
-		data: Prisma.ProjectGetPayload<{
-			include: { google_classroom: true };
-		}>
+		data: Project
 	) => void;
 	open: boolean;
 	setOpen: (open: boolean) => void;
