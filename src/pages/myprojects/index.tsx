@@ -1,5 +1,4 @@
 import prisma from "@/lib/database/prisma";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { enforceAuthentication } from "@/utils/enforcement";
 import Link from "next/link";
 import { Page, PageSection } from "@/components/Page";
@@ -68,8 +67,7 @@ export const getServerSideProps = enforceAuthentication<Props>(
 	async context => {
 		const session = await getServerSessionCached(
 			context.req,
-			context.res,
-			authOptions
+			context.res
 		);
 		const [projects, classes] = await Promise.all([
 			getProjects(session!.currUserId),

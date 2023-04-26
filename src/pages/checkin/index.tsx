@@ -2,7 +2,6 @@ import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { GEnrollment } from "@prisma/client";
 import Link from "next/link";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { Page, PageSection } from "@/components/Page";
 import { Button } from "@/components/Button";
 import { MdDeleteOutline } from "react-icons/md";
@@ -42,8 +41,7 @@ export const getServerSideProps = enforceAuthentication<Props>(
 	async context => {
 		const session = await getServerSessionCached(
 			context.req,
-			context.res,
-			authOptions
+			context.res
 		);
 
 		const data = await getClasses(session!.currUserId);

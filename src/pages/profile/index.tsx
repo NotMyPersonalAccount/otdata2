@@ -2,7 +2,6 @@ import prisma from "@/lib/database/prisma";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { User } from "@prisma/client";
 import { ReactNode } from "react";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { Page, PageSection } from "@/components/Page";
 import { getServerSessionCached } from "@/lib/auth";
 
@@ -20,8 +19,7 @@ type ProfileInfoProps = ProfileSectionProps;
 export const getServerSideProps = enforceAuthentication<Props>(async context => {
 	const session = await getServerSessionCached(
 		context.req,
-		context.res,
-		authOptions
+		context.res
 	);
 	return {
 		props: {

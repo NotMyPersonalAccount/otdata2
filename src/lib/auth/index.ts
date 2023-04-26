@@ -1,6 +1,7 @@
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { IncomingMessage, ServerResponse } from "http";
 import { Session } from "next-auth";
-import { AuthOptions, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
 
 type Request = IncomingMessage & {
@@ -11,13 +12,12 @@ const cachedSessions = new Map<Request, Session | null>();
 
 export async function getServerSessionCached(
 	req: Request,
-	res: ServerResponse,
-	options: AuthOptions
+	res: ServerResponse
 ) {
 	const cached = cachedSessions.get(req);
 	if (cached) return cached;
 
-	const session = await getServerSession(req, res, options);
+	const session = await getServerSession(req, res, authOptions);
 	cachedSessions.set(req, session);
 	return session;
 }

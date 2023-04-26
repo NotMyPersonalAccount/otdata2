@@ -7,7 +7,6 @@ import { sendError } from "@/utils/error_handling";
 import { Checkin, GoogleClassroom } from "@prisma/client";
 import dayjs from "dayjs";
 import { ReactNode, useEffect, useState } from "react";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { Page, PageSection } from "@/components/Page";
 import { getServerSessionCached } from "@/lib/auth";
 
@@ -24,8 +23,7 @@ type CheckinValueProps = {
 export const getServerSideProps = enforceAuthentication<Props>(async context => {
 	const session = await getServerSessionCached(
 		context.req,
-		context.res,
-		authOptions
+		context.res
 	);
 
 	const _class = await prisma.googleClassroom.findFirst({

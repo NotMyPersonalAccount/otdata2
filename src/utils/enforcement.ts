@@ -1,4 +1,3 @@
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { GetServerSideProps } from "next";
 import { forceLogin, sendError } from "./error_handling";
 import { Role } from "@/lib/enums/role";
@@ -18,8 +17,7 @@ export const enforceTeacher: Enforcement = innerFn =>
 	enforceAuthentication(async context => {
 		const session = await getServerSessionCached(
 			context.req,
-			context.res,
-			authOptions
+			context.res
 		);
 		if (session!.role !== Role.Teacher)
 			return sendError("You are not a teacher");
@@ -30,8 +28,7 @@ export const enforceAdmin: Enforcement = innerFn =>
 	enforceAuthentication(async context => {
 		const session = await getServerSessionCached(
 			context.req,
-			context.res,
-			authOptions
+			context.res
 		);
 		if (!session!.admin) return sendError("You are not an admin");
 		return innerFn?.(context) ?? { props: {} };
@@ -40,8 +37,7 @@ export const enforceAdmin: Enforcement = innerFn =>
 export const enforceAuthentication: Enforcement = innerFn => async context => {
 	const session = await getServerSessionCached(
 		context.req,
-		context.res,
-		authOptions
+		context.res
 	);
 	if (session === null) return await forceLogin(context);
 	const result = (await innerFn?.(context)) as {
