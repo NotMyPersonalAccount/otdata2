@@ -1,4 +1,5 @@
 import prisma from "@/lib/database/prisma";
+import dayjs from "dayjs";
 import { enforceAuthentication } from "@/utils/enforcement";
 import { User } from "@prisma/client";
 import { ReactNode } from "react";
@@ -65,6 +66,9 @@ export default function Profile({ data }: Props) {
 					</ProfileInfo>
 					<ProfileInfo title="Ethnicity">
 						{user.user_ethnicity?.join(", ")}
+					</ProfileInfo>
+					<ProfileInfo title="Birthday">
+						{user.birthdate ? dayjs(user.birthdate).format("MMMM D, YYYY") : ""}
 					</ProfileInfo>
 				</PageSection>
 				<PageSection title="Contact" padding="sm">
